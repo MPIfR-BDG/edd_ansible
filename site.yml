@@ -1,0 +1,26 @@
+---
+edd_server:
+  hosts:
+    edd[00:01]
+  vars:
+    ansible_ssh_user: twinchen
+    devices_networking:
+         - "/dev/infiniband/uverbs0"
+         - "/dev/infiniband/issm0"
+         - "/dev/infiniband/rdam_cm"
+         - "/dev/infiniband/umad0"
+
+dev_server:
+  hosts:
+    srx-dev
+  vars:
+    ansible_ssh_user: pulsar
+    devices_networking:
+         - "/dev/infiniband/uverbs0"
+         - "/dev/infiniband/issm0"
+         - "/dev/infiniband/issm1"
+         - "/dev/infiniband/rdam_cm"
+         - "/dev/infiniband/ucm0"
+         - "/dev/infiniband/umad0"
+         - "/dev/infiniband/umad1"
+

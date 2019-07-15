@@ -1,0 +1,9 @@
+---
+- hosts: edd00
+  roles:
+    - gated_spectrometer
+
+- hosts: edd01 srx-dev
+  roles:
+    - test
+
