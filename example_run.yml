@@ -1,9 +1,9 @@
 ---
-- hosts: edd00
+- hosts: gpunode_000 
   roles:
     - gated_spectrometer
 
-- hosts: edd01 srx-dev
+- hosts: gpunode_001 
   roles:
     - test
 
