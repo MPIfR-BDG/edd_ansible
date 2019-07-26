@@ -1,9 +1,10 @@
 ---
-- hosts: gpunode_000 
+- hosts: gpu_server
+  roles:
+    - test
+
+- hosts: gpu_server[0]
   roles:
     - gated_spectrometer
 
-- hosts: gpunode_001 
-  roles:
-    - test
 

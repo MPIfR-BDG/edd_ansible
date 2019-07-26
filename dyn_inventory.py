@@ -31,7 +31,11 @@ if __name__ == "__main__":
     #inventory = ansible.inventory.manager.InventoryManager(loader=loader, sources='all_nodes.yml')
     #all_hosts = [host.get_name() for host in inventory.list_hosts()]
     inventory = json.loads(subprocess.check_output('ansible-inventory -i site.yml --list'.split()))
-    all_hosts = inventory['gpu_server']['children']
+
+    groups = [f for f in inventory.keys() if 'hosts' in inventory[f]]
+    all_hosts = []
+    for g in groups:
+        all_hosts += inventory[g]['hosts']
 
     logging.debug(" {} hosts known: {}".format(len(all_hosts), " ,".join(all_hosts)))
 
@@ -43,17 +47,20 @@ if __name__ == "__main__":
         logging.debug(output)
         return process.returncode == 0
     pool = multiprocessing.Pool(processes=10)
-    available_hosts = [host for host, pr in zip(all_hosts, pool.map(ping_host, all_hosts)) if pr]
+    available_hosts = set([host for host, pr in zip(all_hosts, pool.map(ping_host, all_hosts)) if pr])
     logging.debug(" {} hosts available: {}".format(len(available_hosts), " ,".join(available_hosts)))
 
     ########################################################################
-    # create meta groups
-    output = {}
-    for i,h in enumerate(available_hosts):
-        output['gpunode_{:03}'.format(i)] = {"hosts" : [h]}
+    for g in groups:
+        h = set(inventory[g]['hosts'])
+        inventory[g]['hosts'] = list(h & available_hosts)
 
+
+    #for i,h in enumerate(available_hosts):
+    #    output['gpunode_{:03}'.format(i)] = {"hosts" : [h]}
+    #
     if args.list:
-        print(output)
+        print(inventory)
     elif args.host:
         if args.host not in output.keys():
             print("Unknown host {}. Possible hosts are: {}".format(args.host, ", ".join(output.keys())) )

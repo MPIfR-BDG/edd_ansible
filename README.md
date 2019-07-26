@@ -21,15 +21,15 @@ are roles assigned to individual hosts.
 
 ## Inventories
 All hosts are collected in the
-inventory file `all_nodes.yml` (_This may change in the future!_). You can ping
+inventory file `site.yml` (_This may change in the future!_). You can ping
 them via the command:
  `$ ansible -i all_nodes.yml -m ping all`
 .
 To enable abstraction from physical hosts the inventory of all hosts is read
-by the script `dyn_inventory.py` that assings the available hosts to generic
-names, e.g.
-  - gpunode_000  for nodes with a GPU
-There is currently only one generic name category.
+by the script `dyn_inventory.py` that removes currently not pingable hosts from
+teh file. Within the play(book)s only generic host names as gpu_server[0]
+should be used.
+
 
 
 ## Roles
