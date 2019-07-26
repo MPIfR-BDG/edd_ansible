@@ -1,5 +1,5 @@
 ---
-edd_server:
+gpu_server:
   hosts:
     edd[00:01]
   vars:

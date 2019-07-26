@@ -30,7 +30,9 @@ if __name__ == "__main__":
     #loader = ansible.parsing.dataloader.DataLoader()
     #inventory = ansible.inventory.manager.InventoryManager(loader=loader, sources='all_nodes.yml')
     #all_hosts = [host.get_name() for host in inventory.list_hosts()]
-    all_hosts = subprocess.check_output('ansible all -i all_nodes.yml --list-hosts', shell=True).split()[1:]
+    inventory = json.loads(subprocess.check_output('ansible-inventory -i site.yml --list'.split()))
+    all_hosts = inventory['gpu_server']['children']
+
     logging.debug(" {} hosts known: {}".format(len(all_hosts), " ,".join(all_hosts)))
 
     ########################################################################
@@ -45,7 +47,7 @@ if __name__ == "__main__":
     logging.debug(" {} hosts available: {}".format(len(available_hosts), " ,".join(available_hosts)))
 
     ########################################################################
-    # create output
+    # create meta groups
     output = {}
     for i,h in enumerate(available_hosts):
         output['gpunode_{:03}'.format(i)] = {"hosts" : [h]}
