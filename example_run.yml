@@ -1,11 +1,4 @@
 ---
-# general edd configuration
-- hosts: dev_server[0]
-  roles:
-    - docker_registry
-  tasks:
-    - set_fact: docker_registry={{ inventory_hostname }}
-
 ########################################################################
 # Special configuration for the run
 - hosts: gpu_server[0]

@@ -4,6 +4,12 @@
       path: /tmp/docker_registry
       state: directory
       recurse: yes
+  - name: Create regsitry storage 
+    file:
+      path: /data/docker_regsitry/
+      state: directory
+      recurse: yes
+
   - name: Copy certificate
     copy:
       src: cert
@@ -21,13 +27,16 @@
       detach: yes
       keep_volumes: true
       ports:
-       - "0.0.0.0:443:443"
+       - "0.0.0.0:5000:5000"
       env:
-        REGISTRY_HTTP_ADDR: "0.0.0.0:443"
+        REGISTRY_HTTP_ADDR: "0.0.0.0:5000"
         REGISTRY_HTTP_TLS_CERTIFICATE: "/cert/registry.crt"
         REGISTRY_HTTP_TLS_KEY: "/cert/registry.key"
       volumes:
         - /tmp/docker_registry/cert:/cert
+        - /data/docker_registry:/var/lib/registry
+
+
 
 
 

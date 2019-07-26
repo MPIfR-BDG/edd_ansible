@@ -5,6 +5,7 @@ EDD backend Control with ansible
 python that requires only a SSH login on the host to control its configuration.
 We use it here to manage the EDD backend. The [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html) is a good entry point to get familiar with the tool.
 
+
 ##  General Design Idea
 The ansible terminology is derived from theater - roles are assigned and
 a play is performed.
@@ -18,6 +19,7 @@ availbe services as e.g.
   - BeamFormer
   - ...
 are roles assigned to individual hosts.
+
 
 ## Inventories
 All hosts are collected in the
@@ -37,12 +39,14 @@ Roles are difined in the directory `roles`, e.g `roles/gated_spectrometer`.
 Here the tasks performed by a role are in `tasks/main.yml` that contains only
 one task to start the according docker container.
 
+
 ## Play
 Every configuration is a play. The `example_run.yml` assignes the role
 gated_spectrometer to the first gpu node and executes test roles (a simpel ping) on the next.
 The play is executed by:
 
 `$ansible-playbook -i dyn_inventory.py example_run.yml`
+
 
 ## ToDo:
 - Recovery from desaster(s). The backend roles are currently shut down via the katcp
@@ -54,5 +58,19 @@ The play is executed by:
   the oeprator, thus contradicting the dynamic setup? this would be potentially
   easier to just write a play for the specific observation run.
 
+
 ## Ideas:
 - There can be multiple dynamic inventoreis for different needs
+
+
+## Cheat sheet
+  - Basic setup of the edd backend
+    $ansible-playbook -i site.yml basic_configuration.yml`
+
+  - Build container for configuration
+    $ansible-playbook -i site.yml example_run.yml --tags build
+
+  - Launch gated
+    $ansible-playbook -i site.yml example_run.yml
+
+

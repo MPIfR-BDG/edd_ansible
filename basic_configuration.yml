@@ -10,10 +10,10 @@
   tasks:
     - name: Make sure cert directory exists
       file:
-        path: /etc/docker/certs.d/{{ docker_registry }}:5000
+        path: /etc/docker/certs.d/{{ docker_registry }}
         state: directory
         recurse: yes
     - name: Copy certs
       copy:
         src: roles/docker_registry/files/cert/registry.crt
-        dest: /etc/docker/certs.d/{{ docker_registry }}:5000/ca.crt
+        dest: /etc/docker/certs.d/{{ docker_registry }}/ca.crt

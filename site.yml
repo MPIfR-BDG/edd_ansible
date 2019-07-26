@@ -1,7 +1,7 @@
 ---
 all:
   vars:
-    docker_registry: srx-dev
+    docker_registry: srx-dev:5000
 
 gpu_server:
   hosts:
