@@ -49,6 +49,10 @@ The play is executed by:
   command. We need a system to force shut down the backend via the ansible
   control
 - Smarter dynamic inventories. Fine grained roles and host types in the future?
+- However, can the dynamic inventory as it is cover all use cases as e.g.
+  consider the network topology? Would't teh default here be a manual check of
+  the oeprator, thus contradicting the dynamic setup? this would be potentially
+  easier to just write a play for the specific observation run.
 
 ## Ideas:
 - There can be multiple dynamic inventoreis for different needs
