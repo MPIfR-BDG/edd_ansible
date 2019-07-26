@@ -1,0 +1,33 @@
+---
+  - name: Create cert directory
+    file:
+      path: /tmp/docker_registry
+      state: directory
+      recurse: yes
+  - name: Copy certificate
+    copy:
+      src: cert
+      dest: /tmp/docker_registry/
+
+  - name: Launch docker registry
+    #tags: start
+    docker_container:
+      name: registry
+      image: registry:2
+      state: started            # ensure that is running
+      #restart: true
+      #restart_policy: always
+      network_mode: host
+      detach: yes
+      keep_volumes: true
+      ports:
+       - "0.0.0.0:443:443"
+      env:
+        REGISTRY_HTTP_ADDR: "0.0.0.0:443"
+        REGISTRY_HTTP_TLS_CERTIFICATE: "/cert/registry.crt"
+        REGISTRY_HTTP_TLS_KEY: "/cert/registry.key"
+      volumes:
+        - /tmp/docker_registry/cert:/cert
+
+
+

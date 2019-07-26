@@ -1,0 +1,19 @@
+---
+- hosts: srx-dev 
+  roles:
+    - docker_registry
+
+
+- hosts: edd00 edd01
+  vars:
+    ansible_ssh_user: root
+  tasks:
+    - name: Make sure cert directory exists
+      file:
+        path: /etc/docker/certs.d/{{ docker_registry }}:5000
+        state: directory
+        recurse: yes
+    - name: Copy certs
+      copy:
+        src: roles/docker_registry/files/cert/registry.crt
+        dest: /etc/docker/certs.d/{{ docker_registry }}:5000/ca.crt

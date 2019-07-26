@@ -3,7 +3,7 @@
     #tags: start
     docker_container:
       name: GATED_PRODUCTION
-      image: edd_gated:latest
+      image: "{{ docker_registry }}/edd_gated:latest"
       state: started            # ensure that is running
       privileged: yes
       auto_remove: yes

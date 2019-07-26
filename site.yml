@@ -1,4 +1,8 @@
 ---
+all:
+  vars:
+    docker_registry: srx-dev
+
 gpu_server:
   hosts:
     edd03:
