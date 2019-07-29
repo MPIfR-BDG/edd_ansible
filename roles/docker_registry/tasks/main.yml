@@ -4,7 +4,8 @@
       path: /tmp/docker_registry
       state: directory
       recurse: yes
-  - name: Create regsitry storage 
+
+  - name: Create regsitry storage
     file:
       path: /data/docker_regsitry/
       state: directory
@@ -16,13 +17,12 @@
       dest: /tmp/docker_registry/
 
   - name: Launch docker registry
-    #tags: start
     docker_container:
-      name: registry
+      name: edd_registry
       image: registry:2
-      state: started            # ensure that is running
-      #restart: true
-      #restart_policy: always
+      state: started
+      restart: true
+      restart_policy: always
       network_mode: host
       detach: yes
       keep_volumes: true
@@ -35,8 +35,3 @@
       volumes:
         - /tmp/docker_registry/cert:/cert
         - /data/docker_registry:/var/lib/registry
-
-
-
-
-
