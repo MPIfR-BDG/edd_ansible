@@ -58,11 +58,15 @@ The play is executed by:
 
 
 ## Cheat sheet
-  - Basic setup of the edd backend, including base container
+  - Basic setup of the edd backend, including base container:
     $ansible-playbook -i site.yml basic_configuration.yml`
 
-  - Build container for configuration
+  - Build container for configuration:
     $ansible-playbook -i site.yml example_run.yml --tags build
 
-  - Launch gated
+  - Launch gated + pfb:
     $ansible-playbook -i site.yml example_run.yml
+
+  - Stop gated + pfb:
+    $ansible-playbook -i site.yml example_run.yml --tags stop
+
