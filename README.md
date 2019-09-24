@@ -27,17 +27,15 @@ inventory file `site.yml` (_This may change in the future!_). You can ping
 them via the command:
  `$ ansible -i all_nodes.yml -m ping all`
 .
-To enable abstraction from physical hosts the inventory of all hosts is read
-by the script `dyn_inventory.py` that removes currently not pingable hosts from
-teh file. Within the play(book)s only generic host names as gpu_server[0]
-should be used.
-
 
 
 ## Roles
-Roles are difined in the directory `roles`, e.g `roles/gated_spectrometer`.
+Roles are defined in the directory `roles`, e.g `roles/gated_spectrometer`.
 Here the tasks performed by a role are in `tasks/main.yml` that contains only
-one task to start the according docker container.
+one task to start the according docker container. The build and start of EDD
+docker container is abstracted out into a common role, so taht only some
+variables have to be definied. The Dockerfile to build the corresponding image
+is stored in teh templates.
 
 
 ## Play
@@ -45,7 +43,7 @@ Every configuration is a play. The `example_run.yml` assignes the role
 gated_spectrometer to the first gpu node and executes test roles (a simpel ping) on the next.
 The play is executed by:
 
-`$ansible-playbook -i dyn_inventory.py example_run.yml`
+`$ansible-playbook -i site.yml example_run.yml`
 
 
 ## ToDo:
@@ -59,12 +57,8 @@ The play is executed by:
   easier to just write a play for the specific observation run.
 
 
-## Ideas:
-- There can be multiple dynamic inventoreis for different needs
-
-
 ## Cheat sheet
-  - Basic setup of the edd backend
+  - Basic setup of the edd backend, including base container
     $ansible-playbook -i site.yml basic_configuration.yml`
 
   - Build container for configuration
@@ -72,5 +66,3 @@ The play is executed by:
 
   - Launch gated
     $ansible-playbook -i site.yml example_run.yml
-
-
