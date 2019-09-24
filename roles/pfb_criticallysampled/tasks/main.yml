@@ -1,49 +1,7 @@
 ---
-- name: Launch container for critically sampled pfb 
-  #tags: start
-  docker_container:
-    name: PFB_PRODUCTION
-    image: "{{ docker_registry }}/edd_pfb_critically:latest"
-    state: started            # ensure that is running
-    privileged: yes
-    auto_remove: yes
-    runtime: nvidia
-    devices:
-      "{{ devices_networking }}"
-    network_mode: host
-    capabilities:
-      - "IPC_LOCK"
-    detach: yes
-    command: python /src/EDD_PFB/CriticalPFBPipeline.py
-
-- name: Build docker image
-  block:
-  - name: Create build directory
-    tempfile:
-      state: directory
-      suffix: temp
-    register: build_directory
-
-  - name: Copy dockerfile from template
-    template:
-      src: Dockerfile
-      dest: "{{ build_directory.path }}/Dockerfile"
-
-  - name: build and push
-    docker_image:
-      name: "{{docker_registry}}/edd_pfb_critically"
-      source: build
-      build:
-        path: "{{ build_directory.path }}"
-      push: yes
-
-    #- name: clean up build directory
-    #- file:
-    #-   path: "{{ build_directory.path }}"
-    #-   state: absent
-  run_once: true    # only need to run on one machine
-  tags:
-    - never         # only run when build tag is specified
-    - build
-
-
+ - name: Critically sampled PFB
+   import_role:
+      name: common
+   vars:
+      image_name: edd_pfb_critically
+      container_name: PFB_PRODUCTION
