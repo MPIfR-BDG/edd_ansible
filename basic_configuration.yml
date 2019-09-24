@@ -1,8 +1,10 @@
 ---
-- hosts: srx-dev 
+# Playbook to apply the basic configuration to the system to connect to docker
+# registry.
+#
+- hosts: srx-dev
   roles:
     - docker_registry
-
 
 - hosts: edd00 edd01
   vars:
@@ -17,3 +19,8 @@
       copy:
         src: roles/docker_registry/files/cert/registry.crt
         dest: /etc/docker/certs.d/{{ docker_registry }}/ca.crt
+
+# build base docker image
+- hosts: gpu_server[0]
+  roles:
+    - edd_base

@@ -1,0 +1,34 @@
+---
+- name: Build docker edd base image
+  block:
+  - name: Create build directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: build_directory
+
+  - name: Copy dockerfile from template
+    template:
+      src: Dockerfile
+      dest: "{{ build_directory.path }}/Dockerfile"
+
+  - name: build and push
+    docker_image:
+      name: "{{docker_registry}}/eddbase"
+      source: build
+      force_source: true
+      build:
+        path: "{{ build_directory.path }}"
+      push: yes
+
+    #- name: clean up build directory
+    #- file:
+    #-   path: "{{ build_directory.path }}"
+    #-   state: absent
+  run_once: true    # only need to run on one machine
+  #tags:
+  #  - never         # only run when build tag is specified
+  #  - build
+
+
+
