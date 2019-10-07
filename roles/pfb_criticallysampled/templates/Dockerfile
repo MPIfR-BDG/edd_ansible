@@ -1,4 +1,4 @@
-FROM {{docker_registry}}/eddbase
+FROM eddbase
 MAINTAINER Tobias Winchen "twinchen@mpifr-bonn.mpg.de"
 
 # Suppress debconf warnings
@@ -18,10 +18,14 @@ RUN \
   ### \
   cd /src && \
   git clone https://TobiasWinchen@github.com/TobiasWinchen/EDD_PFB.git  && \
-  mkdir -p EDD_PFB/build && \
-  cd EDD_PFB/build && \
+  cd EDD_PFB && \
+  git submodule init && \
+  git submodule update && \
+  mkdir -p build && \
+  cd build && \
   cmake ..&& \
   make -j4 && \
+  make test && \
   make install
 
 WORKDIR /root
