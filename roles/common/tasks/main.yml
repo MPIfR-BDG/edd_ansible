@@ -37,13 +37,14 @@
       src: Dockerfile
       dest: "{{ build_directory.path }}/Dockerfile"
 
-  - name: build and push 
+  - name: build and push
     docker_image:
       name: "{{docker_registry}}/{{image_name}}"
       source: build
       force_source: true
       build:
         path: "{{ build_directory.path }}"
+        pull: yes
       push: yes
 
     #- name: clean up build directory
