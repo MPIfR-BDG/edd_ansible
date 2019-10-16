@@ -5,8 +5,7 @@ all:
 
 gpu_server:
   hosts:
-    edd03:
-    edd[00:01]:
+    edd00
   vars:
     ansible_ssh_user: twinchen
     devices_networking:

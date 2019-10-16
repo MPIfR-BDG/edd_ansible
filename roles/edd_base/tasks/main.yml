@@ -26,9 +26,9 @@
     #-   path: "{{ build_directory.path }}"
     #-   state: absent
   run_once: true    # only need to run on one machine
-  #tags:
-  #  - never         # only run when build tag is specified
-  #  - build
+  tags:
+    - never         # only run when build tag is specified
+    - build
 
 
 
