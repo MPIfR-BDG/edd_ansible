@@ -12,7 +12,7 @@ gpu_server:
     devices_networking:
          - "/dev/infiniband/uverbs0"
          - "/dev/infiniband/issm0"
-         - "/dev/infiniband/rdam_cm"
+         - "/dev/infiniband/rdma_cm"
          - "/dev/infiniband/umad0"
 
 dev_server:
@@ -24,7 +24,7 @@ dev_server:
          - "/dev/infiniband/uverbs0"
          - "/dev/infiniband/issm0"
          - "/dev/infiniband/issm1"
-         - "/dev/infiniband/rdam_cm"
+         - "/dev/infiniband/rdma_cm"
          - "/dev/infiniband/ucm0"
          - "/dev/infiniband/umad0"
          - "/dev/infiniband/umad1"
