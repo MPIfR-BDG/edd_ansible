@@ -13,4 +13,4 @@ RUN  git clone https://TobiasWinchen@github.com/TobiasWinchen/mpikat.git &&\
   python setup.py install
 
 WORKDIR /root
-CMD /usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/GatedSpectrometerPipeline.py
+CMD /usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/GatedSpectrometerPipeline.py -a 1235

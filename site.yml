@@ -9,10 +9,22 @@ gpu_server:
   vars:
     ansible_ssh_user: twinchen
     devices_networking:
-         - "/dev/infiniband/uverbs0"
-         - "/dev/infiniband/issm0"
          - "/dev/infiniband/rdma_cm"
+         - "/dev/infiniband/issm0"
+         - "/dev/infiniband/ucm0"
          - "/dev/infiniband/umad0"
+         - "/dev/infiniband/uverbs0"
+         - "/dev/infiniband/issm1"
+         - "/dev/infiniband/ucm1"
+         - "/dev/infiniband/umad1"
+         - "/dev/infiniband/uverbs1"
+         - "/dev/infiniband/issm2"
+         - "/dev/infiniband/ucm2"
+         - "/dev/infiniband/umad2"
+         - "/dev/infiniband/uverbs2"
+    docker_runtime: 
+
+
 
 dev_server:
   hosts:
@@ -27,4 +39,5 @@ dev_server:
          - "/dev/infiniband/ucm0"
          - "/dev/infiniband/umad0"
          - "/dev/infiniband/umad1"
+    docker_runtime: 
 

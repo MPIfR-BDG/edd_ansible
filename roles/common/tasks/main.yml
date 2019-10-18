@@ -7,7 +7,7 @@
     state: started            # ensure that is running
     privileged: yes
     auto_remove: yes
-    runtime: nvidia
+    runtime: "{{ docker_runtime }}"
     devices:
       "{{ devices_networking }}"
     network_mode: host
@@ -26,6 +26,13 @@
 
 - name: Build docker image "{{ image_name }}"
   block:
+  - name: Remove image
+    docker_image:
+      name: "{{docker_registry}}/{{image_name}}"
+      state: absent
+      force: yes
+
+
   - name: Create build directory
     tempfile:
       state: directory
