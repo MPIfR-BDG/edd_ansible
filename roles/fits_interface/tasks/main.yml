@@ -1,0 +1,7 @@
+---
+ - name: Fits interface
+   import_role:
+      name: common
+   vars:
+      image_name: edd_fits_interface
+      container_name: FITS_INTERFACE_PRODUCTION

@@ -1,0 +1,6 @@
+---
+########################################################################
+# Special configuration for the run
+- hosts: gpu_server[0]
+  roles:
+    - pfb_criticallysampled
