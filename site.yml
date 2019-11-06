@@ -1,43 +1,47 @@
 ---
 all:
   vars:
-    docker_registry: srx-dev:5000
+    docker_registry: edd-dev
+    docker_registry_port: 5000
+    docker_runtime: ""
+    devices_networking: ""
 
-gpu_server:
-  hosts:
-    edd00
-  vars:
-    ansible_ssh_user: twinchen
-    devices_networking:
-         - "/dev/infiniband/rdma_cm"
-         - "/dev/infiniband/issm0"
-         - "/dev/infiniband/ucm0"
-         - "/dev/infiniband/umad0"
-         - "/dev/infiniband/uverbs0"
-         - "/dev/infiniband/issm1"
-         - "/dev/infiniband/ucm1"
-         - "/dev/infiniband/umad1"
-         - "/dev/infiniband/uverbs1"
-         - "/dev/infiniband/issm2"
-         - "/dev/infiniband/ucm2"
-         - "/dev/infiniband/umad2"
-         - "/dev/infiniband/uverbs2"
-    docker_runtime: 
+  children:
+    gpu_server:
+      hosts:
+        edd[00:01]
+      vars:
+        ansible_ssh_user: twinchen
+        devices_networking:
+          - "/dev/infiniband/rdma_cm"
+          - "/dev/infiniband/issm0"
+          - "/dev/infiniband/ucm0"
+          - "/dev/infiniband/umad0"
+          - "/dev/infiniband/uverbs0"
+          - "/dev/infiniband/issm1"
+          - "/dev/infiniband/ucm1"
+          - "/dev/infiniband/umad1"
+          - "/dev/infiniband/uverbs1"
+          - "/dev/infiniband/issm2"
+          - "/dev/infiniband/ucm2"
+          - "/dev/infiniband/umad2"
+          - "/dev/infiniband/uverbs2"
+        docker_runtime:
+            nvidia
 
 
-
-dev_server:
-  hosts:
-    srx-dev
-  vars:
-    ansible_ssh_user: pulsar
-    devices_networking:
-         - "/dev/infiniband/uverbs0"
-         - "/dev/infiniband/issm0"
-         - "/dev/infiniband/issm1"
-         - "/dev/infiniband/rdma_cm"
-         - "/dev/infiniband/ucm0"
-         - "/dev/infiniband/umad0"
-         - "/dev/infiniband/umad1"
-    docker_runtime: 
-
+    dev_server:
+      hosts:
+        edd-dev:
+      vars:
+        docker_registry_data_path: "/media/scratch/docker_registry/"
+        devices_networking:
+          - "/dev/infiniband/uverbs0"
+          - "/dev/infiniband/issm0"
+          - "/dev/infiniband/issm1"
+          - "/dev/infiniband/rdma_cm"
+          - "/dev/infiniband/ucm0"
+          - "/dev/infiniband/umad0"
+          - "/dev/infiniband/umad1"
+        docker_runtime:
+            nvidia
