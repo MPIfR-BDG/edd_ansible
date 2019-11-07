@@ -1,20 +1,37 @@
 ---
   - name: Create cert directory
     file:
-      path: /tmp/docker_registry
+      path: "{{ docker_registry_data_path }}/cert"
       state: directory
       recurse: yes
 
-  - name: Create regsitry storage
-    file:
-      path: /data/docker_regsitry/
-      state: directory
-      recurse: yes
-
-  - name: Copy certificate
+  - name: Copy private key
+    # openssl genrsa -out registry.key
     copy:
-      src: cert
-      dest: /tmp/docker_registry/
+      src: roles/docker_registry/files/registry.key
+      dest: "{{ docker_registry_data_path }}/cert"
+
+  - name: Generate openssl Certificate Signing Request
+    openssl_csr:
+      path: "{{ docker_registry_data_path }}/cert/registry.csr"
+      privatekey_path: "{{ docker_registry_data_path }}/cert/registry.key"
+      country_name: DE
+      organization_name: MPIFR BACKEND DEV GROUP
+      email_address: twinchen@mpifr-bonn.mpg.de
+      common_name: "{{ docker_registry }}"
+
+  - name: Create ssl certificate for registry
+    openssl_certificate:
+      path: "{{ docker_registry_data_path }}/cert/registry.crt"
+      privatekey_path: "{{ docker_registry_data_path }}/cert/registry.key"
+      csr_path: "{{ docker_registry_data_path }}/cert/registry.csr"
+      provider: selfsigned
+
+  - name: Store certificate locally
+    fetch:
+      src: "{{ docker_registry_data_path }}/cert/registry.crt"
+      dest: data
+      flat: yes
 
   - name: Launch docker registry
     docker_container:
@@ -23,15 +40,16 @@
       state: started
       restart: true
       restart_policy: always
-      network_mode: host
       detach: yes
       keep_volumes: true
+      network_mode: host
+      exposed_ports:
+              - "5000"
       ports:
-       - "0.0.0.0:5000:5000"
+        "5000:5000"
       env:
-        REGISTRY_HTTP_ADDR: "0.0.0.0:5000"
-        REGISTRY_HTTP_TLS_CERTIFICATE: "/cert/registry.crt"
-        REGISTRY_HTTP_TLS_KEY: "/cert/registry.key"
+        REGISTRY_HTTP_ADDR: "0.0.0.0:{{ docker_registry_port }}"
+        REGISTRY_HTTP_TLS_CERTIFICATE: "/var/lib/registry/cert/registry.crt"
+        REGISTRY_HTTP_TLS_KEY: "/var/lib/registry/cert/registry.key"
       volumes:
-        - /tmp/docker_registry/cert:/cert
-        - /data/docker_registry:/var/lib/registry
+        - "{{ docker_registry_data_path }}:/var/lib/registry"

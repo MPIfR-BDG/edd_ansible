@@ -1,4 +1,4 @@
-FROM eddbase
+FROM {{docker_registry}}:{{docker_registry_port}}/eddbase
 MAINTAINER Tobias Winchen "twinchen@mpifr-bonn.mpg.de"
 
 # Suppress debconf warnings

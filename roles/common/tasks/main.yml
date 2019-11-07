@@ -3,7 +3,7 @@
   #tags: start
   docker_container:
     name: "{{ container_name }}"
-    image: "{{ docker_registry }}/{{ image_name }}:latest"
+    image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
     state: started            # ensure that is running
     privileged: yes
     auto_remove: yes
@@ -28,7 +28,7 @@
   block:
   - name: Remove image
     docker_image:
-      name: "{{docker_registry}}/{{image_name}}"
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
       state: absent
       force: yes
 
@@ -46,7 +46,7 @@
 
   - name: build and push
     docker_image:
-      name: "{{docker_registry}}/{{image_name}}"
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
       source: build
       force_source: true
       build:

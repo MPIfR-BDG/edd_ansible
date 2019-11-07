@@ -14,7 +14,7 @@
 
   - name: build and push
     docker_image:
-      name: "{{docker_registry}}/eddbase"
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/eddbase"
       source: build
       force_source: true
       build:

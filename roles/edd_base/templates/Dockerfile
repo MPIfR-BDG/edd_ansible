@@ -80,6 +80,7 @@ RUN mkdir $SRC && \
     cd build/ &&\
     cmake -DENABLE_CUDA=True .. &&\ 
     make -j 8 &&\
+    make test &&\
 		make install && \ 
     ### SPEAD 2 \
     # v1.8.0 or later is required by mksend \
