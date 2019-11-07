@@ -3,6 +3,7 @@ all:
   vars:
     docker_registry: edd-dev
     docker_registry_port: 5000
+    docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
 
@@ -34,7 +35,6 @@ all:
       hosts:
         edd-dev:
       vars:
-        docker_registry_data_path: "/media/scratch/docker_registry/"
         devices_networking:
           - "/dev/infiniband/uverbs0"
           - "/dev/infiniband/issm0"
