@@ -30,7 +30,7 @@
     docker_image:
       name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
       state: absent
-      force: yes
+      force_absent: yes
 
 
   - name: Create build directory
