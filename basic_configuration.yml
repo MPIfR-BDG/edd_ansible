@@ -1,24 +1,23 @@
 ---
 # Playbook to apply the basic configuration to the system to connect to docker
 # registry.
-#
-- hosts: srx-dev
+
+- hosts: edd-dev
   roles:
     - docker_registry
-
-- hosts: edd00 edd01
+- hosts: all
   vars:
     ansible_ssh_user: root
   tasks:
     - name: Make sure cert directory exists
       file:
-        path: /etc/docker/certs.d/{{ docker_registry }}
+        path: "/etc/docker/certs.d/{{ docker_registry }}:{{ docker_registry_port }}"
         state: directory
         recurse: yes
-    - name: Copy certs
+    - name: Get cert for registry
       copy:
-        src: roles/docker_registry/files/cert/registry.crt
-        dest: /etc/docker/certs.d/{{ docker_registry }}/ca.crt
+        src: data/registry.crt
+        dest: "/etc/docker/certs.d/{{ docker_registry }}:{{ docker_registry_port }}/registry.crt"
 
 # build base docker image
 - hosts: gpu_server[0]
