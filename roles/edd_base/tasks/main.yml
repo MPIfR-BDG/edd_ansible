@@ -18,6 +18,7 @@
       source: build
       force_source: true
       build:
+        pull: yes
         path: "{{ build_directory.path }}"
       push: yes
 
