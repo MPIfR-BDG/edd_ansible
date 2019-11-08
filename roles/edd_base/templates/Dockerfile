@@ -1,5 +1,4 @@
-FROM nvidia/cuda:8.0-devel-ubuntu16.04
-#FROM nvidia/cuda:9.2-devel-ubuntu16.04
+FROM nvidia/cuda:9.2-devel-ubuntu18.04
 
 MAINTAINER Tobias Winchen "twinchen@mpifr-bonn.mpg.de"
 
@@ -14,7 +13,7 @@ RUN mkdir $SRC && \
     cd /src && \
     apt-get -y check && \
     apt-get -y update && \
-    apt-get install -y apt-utils apt-transport-https software-properties-common python-software-properties locales && \
+    apt-get install -y apt-utils apt-transport-https software-properties-common locales && \
     apt-get -y update --fix-missing && \
     apt-get -y upgrade && \
     echo en_US.UTF-8 > /etc/locale.gen && \
@@ -40,7 +39,7 @@ RUN mkdir $SRC && \
       libltdl-dev \
       gsl-bin \
       libgsl-dev \
-      libgsl2 \
+      libgsl23 \
       hwloc \
       libhwloc-dev \
       pkg-config \
@@ -55,11 +54,12 @@ RUN mkdir $SRC && \
       numactl && \
     \
     # Download and install Mellanox OFED 4.1.1 for Ubuntu 16.04 \
-    wget http://content.mellanox.com/ofed/MLNX_OFED-4.7-1.0.0.1/MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu16.04-x86_64.tgz &&\ 
-    tar -xzvf MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu16.04-x86_64.tgz &&\ 
-    MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu16.04-x86_64/mlnxofedinstall --user-space-only --without-fw-update --all -q && \
+    wget http://content.mellanox.com/ofed/MLNX_OFED-4.7-1.0.0.1/MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64.tgz &&\ 
+    tar -xzvf MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64.tgz &&\ 
+    MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64/mlnxofedinstall --user-space-only --without-fw-update --all -q && \
+    rm -rf /MLNX_OFED_LINUX* &&\
     # boost all dev conflicts with MEllanox stuff thus install only here\
-    apt-get --no-install-recommends -y install libboost1.58-all-dev && \ 
+    apt-get --no-install-recommends -y install libboost-all-dev && \ 
     ### PSRDADA \
     cd /src && \
     git clone git://git.code.sf.net/p/psrdada/code psrdada && \
@@ -80,7 +80,7 @@ RUN mkdir $SRC && \
     cd build/ &&\
     cmake -DENABLE_CUDA=True .. &&\ 
     make -j 8 &&\
-    make test &&\
+    make test;\
 		make install && \ 
     ### SPEAD 2 \
     # v1.8.0 or later is required by mksend \
@@ -125,7 +125,7 @@ RUN mkdir $SRC && \
 	    python-pil \
       python-cmd2 \
       python-concurrent.futures \
-      libpng12-dev \
+      libpng-dev \
       pkg-config \
       libfreetype6-dev \
       python-scipy \
@@ -140,7 +140,10 @@ RUN mkdir $SRC && \
     git clone https://gitlab.mpifr-bonn.mpg.de/wchen/Beamforming.git && \
     cd Beamforming && \
     python setup.py install &&\
-    echo 'DONE!'
+    echo "Cleanup source codes ..." &&\
+    rm -rf /src &&\
+    echo 'DONE!' 
+
 
 WORKDIR /root
  
