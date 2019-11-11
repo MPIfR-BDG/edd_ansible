@@ -132,7 +132,7 @@ RUN mkdir $SRC && \
       python-pytest \
       python-astropy &&\
       \
-    pip install tornado nvector katpoint && \
+    pip install tornado==4.5.3 nvector katpoint && \
     git clone https://github.com/ska-sa/katportalclient.git &&\
     cd katportalclient && \
     python setup.py install && \
@@ -142,7 +142,7 @@ RUN mkdir $SRC && \
     python setup.py install &&\
     echo "Cleanup source codes ..." &&\
     rm -rf /src &&\
-    echo 'DONE!' 
+    echo 'DONE!'
 
 
 WORKDIR /root
