@@ -5,6 +5,14 @@
         path: "{{ data_dir }}"
         state: directory
         mode: '0777'
+    - acl:
+        path: "{{ data_dir }}"
+        default: yes
+        recursive: yes
+        etype: mask
+        permissions: rwx
+        state: present
+
     - docker_container:
         name: "{{ container_name }}"
         image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
