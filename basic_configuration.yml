@@ -2,9 +2,11 @@
 # Playbook to apply the basic configuration to the system to connect to docker
 # registry.
 
-- hosts: edd-dev
+- hosts: dev_server
   roles:
     - docker_registry
+    - redis_storage 
+
 - hosts: all
   vars:
     ansible_ssh_user: root

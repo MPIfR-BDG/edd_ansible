@@ -1,24 +1,37 @@
 ---
 - name: Launch EDD docker container "{{ image_name }}"
-  #tags: start
-  docker_container:
-    name: "{{ container_name }}"
-    image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
-    state: started            # ensure that is running
-    privileged: yes
-    auto_remove: yes
-    runtime: "{{ docker_runtime }}"
-    devices:
-      "{{ devices_networking }}"
-    network_mode: host
-    capabilities:
-      - "IPC_LOCK"
-    detach: yes
+  block:
+    - file:
+        path: "{{ data_dir }}"
+        state: directory
+        mode: '0777'
+    - docker_container:
+        name: "{{ container_name }}"
+        image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
+        state: started            # ensure that is running
+        privileged: yes
+        auto_remove: yes
+        runtime: "{{ docker_runtime }}"
+        devices:
+          "{{ devices_networking }}"
+        network_mode: host
+        capabilities:
+          - "IPC_LOCK"
+        volumes:
+          - "{{ data_dir }}:/mnt:rw"
+        detach: yes
+    - set_fact:
+        current_edd_container: "{{ container_name }}"
+        current_data_directory: "{{ data_dir }}"
+
 
 - name: Stop EDD docker container "{{ image_name }}"
-  docker_container:
-    name: "{{ container_name }}"
-    state: absent
+  block:
+    - docker_container:
+        name: "{{ container_name }}"
+        state: absent
+    - set_fact:
+        current_edd_container: "NONE"
   tags:
     - never
     - stop
@@ -32,7 +45,6 @@
       state: absent
       force_absent: yes
 
-
   - name: Create build directory
     tempfile:
       state: directory
@@ -44,7 +56,7 @@
       src: Dockerfile
       dest: "{{ build_directory.path }}/Dockerfile"
 
-  - name: build and push
+  - name: Build and push image
     docker_image:
       name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
       source: build

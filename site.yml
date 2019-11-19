@@ -1,18 +1,22 @@
 ---
 all:
   vars:
-    docker_registry: edd-dev
+    redis_storage: "{{ groups['dev_server'][0] }}"
+    docker_registry: "{{ groups['dev_server'][0] }}"
     docker_registry_port: 5000
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
 
   children:
+    dev_server:
+      hosts:
+        edd01
+
     gpu_server:
       hosts:
         edd[00:01]
       vars:
-        ansible_ssh_user: twinchen
         devices_networking:
           - "/dev/infiniband/rdma_cm"
           - "/dev/infiniband/issm0"
@@ -30,18 +34,3 @@ all:
         docker_runtime:
             nvidia
 
-
-    dev_server:
-      hosts:
-        edd-dev:
-      vars:
-        devices_networking:
-          - "/dev/infiniband/uverbs0"
-          - "/dev/infiniband/issm0"
-          - "/dev/infiniband/issm1"
-          - "/dev/infiniband/rdma_cm"
-          - "/dev/infiniband/ucm0"
-          - "/dev/infiniband/umad0"
-          - "/dev/infiniband/umad1"
-        docker_runtime:
-            nvidia

@@ -140,6 +140,7 @@ RUN mkdir $SRC && \
     git clone https://gitlab.mpifr-bonn.mpg.de/wchen/Beamforming.git && \
     cd Beamforming && \
     python setup.py install &&\
+    pip install redis &&\
     echo "Cleanup source codes ..." &&\
     rm -rf /src &&\
     echo 'DONE!'

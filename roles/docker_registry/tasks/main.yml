@@ -30,7 +30,7 @@
   - name: Store certificate locally
     fetch:
       src: "{{ docker_registry_data_path }}/cert/registry.crt"
-      dest: data
+      dest: data/
       flat: yes
 
   - name: Launch docker registry
@@ -44,9 +44,9 @@
       keep_volumes: true
       network_mode: host
       exposed_ports:
-              - "5000"
+              - "{{ docker_registry_port }}"
       ports:
-        "5000:5000"
+        "{{ docker_registry_port }}:{{ docker_registry_port }}"
       env:
         REGISTRY_HTTP_ADDR: "0.0.0.0:{{ docker_registry_port }}"
         REGISTRY_HTTP_TLS_CERTIFICATE: "/var/lib/registry/cert/registry.crt"
