@@ -1,0 +1,8 @@
+---
+ - name: Master Controller
+   import_role:
+      name: common
+   vars:
+      image_name: edd_master_controller
+      container_name: MASTER_CONTROLLER
+
