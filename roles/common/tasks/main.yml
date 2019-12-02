@@ -1,6 +1,8 @@
 ---
-- name: Launch EDD docker container "{{ image_name }}"
+- name: Launch EDD docker container "{{ image_name }}" 
   block:
+    - debug:
+        msg: Launch EDD docker container "{{ image_name }}"
     - file:
         path: "{{ data_dir }}"
         state: directory

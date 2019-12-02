@@ -22,6 +22,7 @@ RUN mkdir $SRC && \
     apt-get --no-install-recommends -y install \
       build-essential \
       autoconf \
+      iputils-ping \
       autotools-dev \
       automake \
       autogen \
