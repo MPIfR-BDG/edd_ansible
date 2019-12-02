@@ -3,6 +3,12 @@
   block:
     - debug:
         msg: Launch EDD docker container "{{ image_name }}"
+    - set_fact:
+        container_name: default_container_name
+      when: container_name is not defined
+    - set_fact:
+        edd_container: "{{ {} }}"
+      when: edd_container is not defined
     - file:
         path: "{{ data_dir }}"
         state: directory
@@ -14,10 +20,19 @@
         etype: mask
         permissions: rwx
         state: present
+    - shell: netstat -nlt4 | grep -oP '(?<=0.0.0.0:)(\d+)'
+      register: used_ports
+
+    - set_fact:
+        bind_port: "{{ edd_katcp_ports| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
+      failed_when: bind_port | int == 0
+    - debug: 
+        msg: " {{ container_name }} katcp listening on port {{ bind_port }}"
 
     - docker_container:
         name: "{{ container_name }}"
         image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
+        command: "{{ container_cmd }}"
         state: started            # ensure that is running
         privileged: yes
         auto_remove: yes
@@ -30,10 +45,10 @@
         volumes:
           - "{{ data_dir }}:/mnt:rw"
         detach: yes
-    - set_fact:
-        current_edd_container: "{{ container_name }}"
-        current_data_directory: "{{ data_dir }}"
 
+    - set_fact:
+        edd_container: "{{ edd_container | combine( { container_name: {'port': bind_port, 'output_dir': data_dir} } )}}"
+        cacheable: true
 
 - name: Stop EDD docker container "{{ image_name }}"
   block:
@@ -41,7 +56,8 @@
         name: "{{ container_name }}"
         state: absent
     - set_fact:
-        current_edd_container: "NONE"
+        edd_container: "{{ }}"
+        cacheable: true
   tags:
     - never
     - stop

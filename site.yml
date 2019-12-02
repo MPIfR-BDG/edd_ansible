@@ -12,6 +12,13 @@ all:
     edd_subnet: "0.0.0.0"
     # Port on which to reach the master controller
     master_controller_port: "1239"
+    # ports which can be assigned to katcp servers for products
+    edd_katcp_ports:
+      - 7147
+      - 7148
+      - 7149
+      - 7150
+
 
     fact_caching: redis
     fact_caching_connection: edd01:6379:0
