@@ -7,6 +7,19 @@ all:
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
+    # The subnet to which the katcp server are listening to for control
+    # connections
+    edd_subnet: "0.0.0.0"
+    # Port on which to reach the master controller
+    master_controller_port: "1239"
+
+    fact_caching: redis
+    fact_caching_connection: edd01:6379:0
+
+    #cache: yes
+    #cache_plugin: redis
+    #cache_timeout: 7200
+    #cache_connection: edd01:6379:0
 
   children:
     dev_server:

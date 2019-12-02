@@ -1,0 +1,15 @@
+---
+  - name: Launch redis storage 
+    docker_container:
+      name: edd_redis
+      image: redis:5-buster
+      state: started
+      restart: true
+      restart_policy: always
+      detach: yes
+      keep_volumes: true
+      network_mode: host
+      exposed_ports:
+              - "6379"
+      ports:
+        "6379:6379"

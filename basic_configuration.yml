@@ -5,7 +5,8 @@
 - hosts: dev_server
   roles:
     - docker_registry
-    - redis_storage 
+    - redis_storage
+    - edd_master_controller
 
 - hosts: all
   vars:

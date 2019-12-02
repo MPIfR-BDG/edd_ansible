@@ -22,7 +22,7 @@ are roles assigned to individual hosts.
 
 
 ## Inventories
-All hosts are collected in the
+All hosts + global variables for the site are collected in the
 inventory file `site.yml` . You can ping
 them via the command:
  `$ ansible -i site.yml -m ping all`
@@ -52,19 +52,21 @@ The play is executed by:
 
 
 ## Cheat sheet
-  - Basic setup of the edd backend: 
-    configures a central docker registry and access of all nodes to it
+  - Basic setup of the edd backend. This configures:
+    - a central docker registry and access of all nodes to it
+    - a redis server
+    - a master controller
     $ansible-playbook -i site.yml basic_configuration.yml`
 
-    build the edd base container
+    build the edd base container and master controller
     $ansible-playbook -i site.yml basic_configuration.yml` --tags=build
 
-  - Build container for configuration:
+  - Build containers for run:
     $ansible-playbook -i site.yml example_run.yml --tags build
 
-  - Launch gated
+  - Launch run:
     $ansible-playbook -i site.yml example_run.yml
 
-  - Stop gated
+  - Stop run:
     $ansible-playbook -i site.yml example_run.yml --tags stop
 
