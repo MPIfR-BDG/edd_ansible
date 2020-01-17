@@ -1,10 +1,13 @@
 ---
-- name: Launch EDD docker container "{{ image_name }}" 
+- name: Launch EDD docker container "{{ image_name }}"
   block:
     - debug:
         msg: Launch EDD docker container "{{ image_name }}"
     - set_fact:
-        container_name: default_container_name
+        default_container_name : "{{ image_name }}"
+      when: default_container_name is not defined
+    - set_fact:
+        container_name: "{{ default_container_name }}"
       when: container_name is not defined
     - set_fact:
         edd_container: "{{ {} }}"
@@ -26,7 +29,7 @@
     - set_fact:
         bind_port: "{{ edd_katcp_ports| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
       failed_when: bind_port | int == 0
-    - debug: 
+    - debug:
         msg: " {{ container_name }} katcp listening on port {{ bind_port }}"
 
     - docker_container:

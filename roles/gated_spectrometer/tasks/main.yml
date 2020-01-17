@@ -4,6 +4,6 @@
       name: common
    vars:
       image_name: edd_gated
-      default_container_name: GATED_PRODUCTION
+      default_container_name: gated_spectrometer
       container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/GatedSpectrometerPipeline.py --host={{ edd_subnet }} --port={{ bind_port }}"
 
