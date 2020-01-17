@@ -3,7 +3,7 @@ all:
   vars:
     redis_storage: "{{ groups['dev_server'][0] }}"
     docker_registry: "{{ groups['dev_server'][0] }}"
-    docker_registry_port: 5000
+    docker_registry_port: "5000"
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
@@ -11,14 +11,13 @@ all:
     # connections
     edd_subnet: "0.0.0.0"
     # Port on which to reach the master controller
-    master_controller_port: "1239"
+    #master_controller_port: "1239"
     # ports which can be assigned to katcp servers for products
     edd_katcp_ports:
       - 7147
       - 7148
       - 7149
       - 7150
-
 
     fact_caching: redis
     fact_caching_connection: edd01:6379:0
