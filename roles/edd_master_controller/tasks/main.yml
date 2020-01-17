@@ -5,5 +5,5 @@
    vars:
       image_name: edd_master_controller
       container_name: MASTER_CONTROLLER
-      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/ mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
 

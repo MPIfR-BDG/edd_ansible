@@ -61,7 +61,7 @@ The play is executed by:
     build the edd base container and master controller
     $ansible-playbook -i site.yml basic_configuration.yml` --tags=build
 
-  - Build containers for run:
+  - Build containers for run 9Rebuild all containers!):
     $ansible-playbook -i site.yml example_run.yml --tags build
 
   - Launch run:
@@ -69,4 +69,7 @@ The play is executed by:
 
   - Stop run:
     $ansible-playbook -i site.yml example_run.yml --tags stop
+
+  - Quick built of specific role for developing purposes:
+    $quick_build_role.sh edd_master_controller
 
