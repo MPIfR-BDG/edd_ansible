@@ -56,12 +56,14 @@ The play is executed by:
     - a central docker registry and access of all nodes to it
     - a redis server
     - a master controller
-    $ansible-playbook -i site.yml basic_configuration.yml`
+    As the redis server is not available yet we have to override fact caching
+    plugin here
+    $ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml
 
     build the edd base container and master controller
     $ansible-playbook -i site.yml basic_configuration.yml` --tags=build
 
-  - Build containers for run 9Rebuild all containers!):
+  - Build containers for run (Rebuild all containers!):
     $ansible-playbook -i site.yml example_run.yml --tags build
 
   - Launch run:
