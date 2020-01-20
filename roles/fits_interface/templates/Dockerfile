@@ -18,5 +18,5 @@ RUN  apt remove -y python-pip &&\
   git checkout spead_fi_server && \
   python setup.py install
 
-WORKDIR /root
-CMD /usr/bin/python /src/mpikat/mpikat/effelsberg/edd/spead2_fi_server_new_items.py -p 1235
+WORKDIR /root 
+CMD /usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/spead2_fi_server.py --host=0.0.0.0 --port=1235
