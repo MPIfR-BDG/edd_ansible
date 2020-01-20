@@ -93,6 +93,7 @@
       build:
         path: "{{ build_directory.path }}"
         pull: yes
+        nocache: true
       push: yes
 
     #- name: clean up build directory
