@@ -13,9 +13,9 @@ RUN  apt remove -y python-pip &&\
   # INSTALL MPIKAT: TODO, move to base
   mkdir -p /src && \
   cd /src && \
-  git clone https://github.com/ewanbarr/mpikat.git && \
+  git clone https://TobiasWinchen@github.com/TobiasWinchen/mpikat.git &&\
   cd mpikat && \
-  git checkout spead_fi_server && \
+  git checkout dev && \
   python setup.py install
 
 WORKDIR /root 
