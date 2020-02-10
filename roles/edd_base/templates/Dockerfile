@@ -124,6 +124,7 @@ RUN mkdir $SRC && \
 	    python-setuptools-scm \
 	    python-pip \
 	    python-pil \
+      python-jinja2 \
       python-cmd2 \
       python-concurrent.futures \
       libpng-dev \

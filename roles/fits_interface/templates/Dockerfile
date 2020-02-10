@@ -13,7 +13,7 @@ RUN  apt remove -y python-pip &&\
   # INSTALL MPIKAT: TODO, move to base
   mkdir -p /src && \
   cd /src && \
-  git clone https://TobiasWinchen@github.com/TobiasWinchen/mpikat.git &&\
+  git clone https://github.com/MPIfR-BDG/mpikat.git &&\
   cd mpikat && \
   git checkout dev && \
   python setup.py install
