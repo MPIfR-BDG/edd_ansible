@@ -19,9 +19,6 @@ all:
       - 7149
       - 7150
 
-    fact_caching: redis
-    fact_caching_connection: edd01:6379:0
-
     #cache: yes
     #cache_plugin: redis
     #cache_timeout: 7200
