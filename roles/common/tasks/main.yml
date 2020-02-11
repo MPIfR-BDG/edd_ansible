@@ -37,6 +37,7 @@
         image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
         command: "{{ container_cmd }}"
         state: started            # ensure that is running
+        pull: yes
         privileged: yes
         auto_remove: yes
         runtime: "{{ docker_runtime }}"

@@ -1,8 +1,25 @@
 ---
- - name: Master Controller
-   import_role:
-      name: common
-   vars:
-      image_name: edd_master_controller
-      container_name: MASTER_CONTROLLER
-      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
+- name: Master Controller
+  import_role:
+     name: common
+  vars:
+     image_name: edd_master_controller
+     container_name: MASTER_CONTROLLER
+     container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
+
+- name: copy ssh key
+  copy:
+    src: data/id_rsa
+    dest: "/var/tmp/id_rsa"
+
+- name: install ssh key in container
+  shell: docker cp /tmp/id_rsa MASTER_CONTROLLER:/root/.ssh/
+
+
+- name: copy ansible.cfg
+  template:
+    src: ansible.cfg
+    dest: "/var/tmp/ansible.cfg"
+
+- name: install ansible.cfg in container
+  shell: docker cp /tmp/ansible.cfg MASTER_CONTROLLER:/etc/ansible/

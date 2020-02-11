@@ -2,13 +2,10 @@
 # Playbook to apply the basic configuration to the system to connect to docker
 # registry.
 
-- hosts: dev_server
-  roles:
-    - docker_registry
-    - redis_storage
-    - edd_master_controller
-
-- hosts: all
+########################################################################
+- name: Additional bare metal configuration 
+  hosts: all
+  gather_facts: no
   vars:
     ansible_ssh_user: root
   tasks:
@@ -22,7 +19,32 @@
         src: data/registry.crt
         dest: "/etc/docker/certs.d/{{ docker_registry }}:{{ docker_registry_port }}/registry.crt"
 
-# build base docker image
-- hosts: gpu_server[0]
+
+########################################################################
+- name: Generate local security relevant data
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  tasks:
+    - name: generate ssh keys for ansible interface
+      openssh_keypair:
+        path: "{{ playbook_dir }}/data/id_rsa"
+  tags:
+    - build
+
+
+########################################################################
+- name: setup control server
+  hosts: dev_server
+  roles:
+    - docker_registry
+    - redis_storage
+    - edd_master_controller
+
+
+########################################################################
+- name: setup worker nodes
+  hosts: all
+  gather_facts: no
   roles:
     - edd_base

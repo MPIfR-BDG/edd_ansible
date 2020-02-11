@@ -9,7 +9,7 @@
 
   - name: Copy dockerfile from template
     template:
-      src: Dockerfile
+      src: Dockerfile_eddbase
       dest: "{{ build_directory.path }}/Dockerfile"
 
   - name: build and push
@@ -22,14 +22,59 @@
         path: "{{ build_directory.path }}"
       push: yes
 
-    #- name: clean up build directory
-    #- file:
-    #-   path: "{{ build_directory.path }}"
-    #-   state: absent
   run_once: true    # only need to run on one machine
   tags:
     - never         # only run when build tag is specified
     - build
 
 
+- name: Build ansible interface image
+  block:
+  - name: Create build directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: build_directory
+
+  - name: Copy dockerfile from template
+    template:
+      src: Dockerfile_ansibleinterface
+      dest: "{{ build_directory.path }}/Dockerfile"
+
+  - name: Copy ssh key
+    copy:
+      src: data/id_rsa.pub
+      dest: "{{ build_directory.path }}/id_rsa.pub"
+
+  - name: build and push
+    docker_image:
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/ansibleinterface"
+      source: build
+      force_source: true
+      build:
+        pull: yes
+        path: "{{ build_directory.path }}"
+      push: yes
+
+  run_once: true    # only need to run on one machine
+  tags:
+    - never         # only run when build tag is specified
+    - build
+
+
+- name: Launch ansible interface
+  docker_container:
+    name: "edd_ansible_interface"
+    image: "{{ docker_registry }}:{{ docker_registry_port }}/ansibleinterface:latest"
+    detach: yes
+    state: started            # ensure that is running
+    network_mode: bridge
+    restart: true
+    pull: yes
+    restart_policy: always
+    ports:
+      - "{{ edd_ansible_port }}:22"
+    volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+    detach: yes
 
