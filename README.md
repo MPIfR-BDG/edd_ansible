@@ -3,10 +3,12 @@ EDD backend Control with ansible
 
 [Ansible](https://www.ansible.com/) is an IT automatization tool written in
 python that requires only a SSH login on the host to control its configuration.
-We use it here to manage the EDD backend. The [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html) is a good entry point to get familiar with the tool.
+We use it here to manage the EDD backend. The [Ansible
+documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html)
+is a good entry point to get familiar with the tool.
 
 
-##  General Design Idea
+## Ansible basics
 The ansible terminology is derived from theater - roles are assigned and
 a play is performed.
 
@@ -21,7 +23,7 @@ available services are e.g.
 are roles assigned to individual hosts.
 
 
-## Inventories
+### Inventories
 All hosts + global variables for the site are collected in the
 inventory file `site.yml` . You can ping
 them via the command:
@@ -29,7 +31,7 @@ them via the command:
 .
 
 
-## Roles
+### Roles
 Roles are defined in the directory `roles`, e.g `roles/gated_spectrometer`.
 Here the tasks performed by a role are in `tasks/main.yml` that contains only
 one task to start the according docker container. The build and start of EDD
@@ -38,40 +40,78 @@ variables have to be defined. The Dockerfile to build the corresponding image
 is stored in the templates.
 
 
-## Play
+### Play
 Every configuration is a play. The `example_run.yml` assignees the role
-gated_spectrometer to the first gpu node and executes test roles (a simple ping) on the next.
-The play is executed by:
+gated_spectrometer to the first gpu node and executes test roles (a simple
+ping) on the next.  The play is executed by:
 
 `$ansible-playbook -i site.yml example_run.yml`
 
 
+## Ansible for EDD provisioning
+### EDD Core
+The core EDD consists of
+  * A master controller
+  * A redis DB
+  * A docker registry
+  * A ansibleinterface container running on every node of the system
+
+The basic_configuration.yml playbook will ensure the core system is up and
+running. Use
+`
+$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml
+`
+to execute the playbook, respectively **also** use
+
+`
+$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml --tags=build
+`
+to build the containers. This is a force build to always pull latest changes
+from the repositoreis. The basic configuration playbook will *create* the
+registry certificate and ssh key-pairs for the docker registry, respectively
+ansible_interface. **Old keys will be overwritten, so manually granted access
+to components outside of the ansible system by copying e.g. the certificate
+will be withdrawn.**
+
+
+### EDD provisioning
+To provison EDD based pipelines, a play needs to be loaded
+`
+$ansible-playbook -i site.yml provision_descriptions/example_playbook.yml
+`
+Potentially, the required containers need **also** to be build before loading the play:
+`
+$ansible-playbook -i site.yml provision_descriptions/example_playbook.yml --tags=build
+`
+To stop the containers launched use:
+`
+$ansible-playbook -i site.yml example_run.yml --tags stop
+``
+
+The master controller may also provision the edd. The master controller
+container thus pulls the edd_ansible repository and installs the site config
+and roles.
+
+
+## EDD Ansible structure
+The repository is organied in the recommended playbook structure.
+
+  - roles/ contains individual roles for EDD components, e.g.
+    - roles/edd_master_controller
+    - roles/gated_spectrometer
+    - ...
+  - roles/common contains common tasks to launch, stop, build the pipeline
+    containers
+  - roles/edd_base contains the tasks to build the eddbase container (usefull,
+    but nor required) as base for pipeline containers. The role also launches
+    the ansible interface on all nodes.
+
+
+## Development hints
+- Execute quick_build_role.sh  roles/myrole to quickly build  a single role
+  without executing a playbook with --build tags which may build several
+  roles.
+
+
 ## ToDo:
-  - launch in scpi mode?
   - manage tags + launch different tags
-
-
-## Cheat sheet
-  - Basic setup of the edd backend. This configures:
-    - a central docker registry and access of all nodes to it
-    - a redis server
-    - a master controller
-    As the redis server is not available yet we have to override fact caching
-    plugin here
-    $ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml
-
-    build the edd base container and master controller
-    $ansible-playbook -i site.yml basic_configuration.yml` --tags=build
-
-  - Build containers for run (Rebuild all containers!):
-    $ansible-playbook -i site.yml example_run.yml --tags build
-
-  - Launch run:
-    $ansible-playbook -i site.yml example_run.yml
-
-  - Stop run:
-    $ansible-playbook -i site.yml example_run.yml --tags stop
-
-  - Quick built of specific role for developing purposes:
-    $quick_build_role.sh edd_master_controller
-
