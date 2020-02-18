@@ -43,7 +43,7 @@
 
   - name: Copy ssh key
     copy:
-      src: data/id_rsa.pub
+      src: "{{ base_path }}/data/id_rsa.pub"
       dest: "{{ build_directory.path }}/id_rsa.pub"
 
   - name: build and push
@@ -76,5 +76,4 @@
       - "{{ edd_ansible_port }}:22"
     volumes:
           - "/var/run/docker.sock:/var/run/docker.sock"
-    detach: yes
 
