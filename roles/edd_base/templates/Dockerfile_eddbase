@@ -7,9 +7,10 @@ ENV DEBIAN_FRONTEND noninteractive
 
 USER root
 
-ENV SRC /src
+# Software sources go to /src
 
-RUN mkdir $SRC && \
+# basic setup of installed packages and Melanox drivers
+RUN mkdir /src && \
     cd /src && \
     apt-get -y check && \
     apt-get -y update && \
@@ -60,18 +61,23 @@ RUN mkdir $SRC && \
     MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64/mlnxofedinstall --user-space-only --without-fw-update --all -q && \
     rm -rf /MLNX_OFED_LINUX* &&\
     # boost all dev conflicts with MEllanox stuff thus install only here\
-    apt-get --no-install-recommends -y install libboost-all-dev && \ 
-    ### PSRDADA \
-    cd /src && \
+    apt-get --no-install-recommends -y install libboost-all-dev
+
+
+### PSRDADA
+RUN cd /src && \
     git clone git://git.code.sf.net/p/psrdada/code psrdada && \
     cd psrdada && \
+    git checkout 10513fff767ce9922c3423eb7199c64f9301d1c8 && \
+    # Version from  Wed Feb 12 07:46:37 2020 +0200 \
     ./bootstrap && \
     ./configure --with-cuda-dir=yes --with-cuda-include-dir=/usr/local/cuda/include/ --with-cuda-lib-dir=/usr/local/cuda/lib64/ && \
     make -j4 && \
-    make install && \ 
-    ### PSRDADACPP 2 \
-    cd /src && \
-    git clone https://github.com/TobiasWinchen/psrdada_cpp.git && \
+    make install
+
+### PSRDADACPP 2 \
+RUN cd /src && \
+    git clone https://github.com/MPIfR-BDG/psrdada_cpp.git && \
     cd psrdada_cpp/ &&\
     ### Could be lib for lib layout in VLBI mode \
     git checkout devel &&\
@@ -82,20 +88,22 @@ RUN mkdir $SRC && \
     cmake -DENABLE_CUDA=True .. &&\ 
     make -j 8 &&\
     make test;\
-		make install && \ 
-    ### SPEAD 2 \
-    # v1.8.0 or later is required by mksend \
-    # v1.9.2 does not work with the ibverbs version MLNX_OFED-4.1-1.0.2.0 used above \
-    cd /src && \
+		make install
+
+### SPEAD 2 \
+ RUN  cd /src && \
     git clone https://github.com/ska-sa/spead2.git && \
     cd spead2 && \
     git checkout v1.8.0  && \
+    # v1.8.0 or later is required by mksend \
+    # v1.9.2 does not work with the ibverbs version MLNX_OFED-4.1-1.0.2.0 used above \
     ./bootstrap.sh --no-python && \
     ./configure && \
     make -j8 &&\
-    make install &&\
-    ### MKRECV \ 
-    cd /src && \
+    make install
+
+### MKRECV \ 
+RUN  cd /src && \
     git clone https://gitlab.mpifr-bonn.mpg.de/mhein/mkrecv.git && \
     cd mkrecv &&\
     mkdir build &&\
@@ -103,18 +111,20 @@ RUN mkdir $SRC && \
     # TODO: AVOID LOCAL PATHS
     cmake .. -DENABLE_CUDA=TRUE -DPSRDADA_CPP_INCLUDE_DIR=/src/psrdada_cpp/ -DPSRDADA_CPP_LIBRARIES=/src/psrdada_cpp/build/psrdada_cpp/libpsrdada_cpp.a && \
     make -j8 &&\
-    make install &&\
-    ### MKSEND \
-    cd /src && \
+    make install
+
+### MKSEND \
+RUN cd /src && \
     git clone https://gitlab.mpifr-bonn.mpg.de/mhein/mksend.git && \
     cd mksend && \
     mkdir build &&\
     cd build && \
     cmake .. -DENABLE_CUDA=TRUE -DPSRDADA_CPP_INCLUDE_DIR=/src/psrdada_cpp/ -DPSRDADA_CPP_LIBRARIES=/src/psrdada_cpp/build/psrdada_cpp/libpsrdada_cpp.a && \
     make -j8 &&\
-    make install &&\
-    ### MPIKAT \
-    cd /src && \
+    make install
+
+ ### MPIKAT dependencies\
+RUN   cd /src && \
     apt-get --no-install-recommends -y install \
       libhdf5-dev \
       python-h5py \
@@ -141,12 +151,12 @@ RUN mkdir $SRC && \
     cd /src && \
     git clone https://gitlab.mpifr-bonn.mpg.de/wchen/Beamforming.git && \
     cd Beamforming && \
+    git checkout f6e10a2bd7fd2c224aa04e1ddc9308b48eeddb4d && \
     python setup.py install &&\
     pip install redis &&\
-    echo "Cleanup source codes ..." &&\
-    rm -rf /src &&\
+#    echo "Cleanup source codes ..." &&\
+#    rm -rf /src &&\
     echo 'DONE!'
 
-
 WORKDIR /root
- 
+
