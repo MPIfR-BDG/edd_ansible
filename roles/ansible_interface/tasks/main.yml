@@ -1,0 +1,49 @@
+---
+
+- name: Build ansible interface image
+  block:
+  - name: Create build directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: build_directory
+
+  - name: Copy dockerfile from template
+    template:
+      src: Dockerfile
+      dest: "{{ build_directory.path }}/Dockerfile"
+
+  - name: Copy ssh key
+    copy:
+      src: "{{ base_path }}/data/id_rsa.pub"
+      dest: "{{ build_directory.path }}/id_rsa.pub"
+
+  - name: build and push
+    docker_image:
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/ansibleinterface"
+      source: build
+      force_source: true
+      build:
+        pull: yes
+        path: "{{ build_directory.path }}"
+      push: yes
+
+  run_once: true    # only need to run on one machine
+  tags:
+    - never         # only run when build tag is specified
+    - build
+
+
+- name: Launch ansible interface
+  docker_container:
+    name: "edd_ansible_interface"
+    image: "{{ docker_registry }}:{{ docker_registry_port }}/ansibleinterface:latest"
+    detach: yes
+    state: started            # ensure that is running
+    network_mode: host        # host as need access to network for introspection
+    restart: true
+    pull: yes
+    restart_policy: always
+    volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+
