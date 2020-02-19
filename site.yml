@@ -4,7 +4,7 @@ all:
     redis_storage: "{{ groups['dev_server'][0] }}"
     docker_registry: "{{ groups['dev_server'][0] }}"
     docker_registry_port: "5000"
-    ansible_python_interpreter: auto_silent
+    ansible_python_interpreter: auto_legacy_silent
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
