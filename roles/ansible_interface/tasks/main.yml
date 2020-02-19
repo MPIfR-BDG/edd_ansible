@@ -28,6 +28,12 @@
         path: "{{ build_directory.path }}"
       push: yes
 
+  - name: remove the temporary directory
+    file:
+      path: "{{ build_directory.path }}"
+      state: absent
+    when: build_directory.path is defined
+
   run_once: true    # only need to run on one machine
   tags:
     - never         # only run when build tag is specified

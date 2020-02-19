@@ -1,8 +1,7 @@
 ---
-- name: Launch EDD docker container "{{ image_name }}"
+
+- name: Check for custom vs default container names
   block:
-    - debug:
-        msg: Launch EDD docker container "{{ image_name }}"
     - set_fact:
         default_container_name : "{{ image_name }}"
       when: default_container_name is not defined
@@ -12,6 +11,14 @@
     - set_fact:
         edd_container: "{{ {} }}"
       when: edd_container is not defined
+  tags:
+    - always
+
+
+- name: Launch EDD docker container "{{ image_name }}"
+  block:
+    - debug:
+        msg: Launch EDD docker container "{{ image_name }}"
     - file:
         path: "{{ data_dir }}"
         state: directory
@@ -60,7 +67,7 @@
         name: "{{ container_name }}"
         state: absent
     - set_fact:
-        edd_container: "{{ }}"
+        edd_container:
         cacheable: true
   tags:
     - never
@@ -107,10 +114,13 @@
         nocache: true
       push: yes
 
-    #- name: clean up build directory
-    #- file:
-    #-   path: "{{ build_directory.path }}"
-    #-   state: absent
+  - name: remove the temporary directory
+    file:
+      path: "{{ build_directory.path }}"
+      state: absent
+    when: build_directory.path is defined
+
+
   run_once: true    # only need to run on one machine
   tags:
     - never         # only run when build tag is specified
