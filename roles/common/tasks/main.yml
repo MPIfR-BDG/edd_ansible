@@ -86,6 +86,16 @@
       src: Dockerfile
       dest: "{{ build_directory.path }}/Dockerfile"
 
+
+  - name: Copy additional build files
+    copy:
+      src: "{{ item }}"
+      dest: "{{ build_directory.path }}/"
+    with_fileglob:
+      - "{{ additional_build_files.path }}/*"
+    when: additional_build_files is defined
+
+
   - name: Build and push image
     docker_image:
       name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"

@@ -18,6 +18,8 @@
       redis_storage_host: "{{ ansible_hostname }}"
       cacheable: yes
     when: default_container_name is not defined
+    tags:
+      always
 
   - name: Flush all redis db
     redis:

@@ -20,5 +20,8 @@ RUN git clone https://github.com/MPIfR-BDG/mpikat.git &&\
   cp edd_ansible/site.yml /etc/ansible/hosts &&\
   mkdir ~/.ssh
 
+COPY ansible.cfg /etc/ansible/ansible.cfg
+COPY id_rsa /root/.ssh/id_rsa
+
 WORKDIR /root
 CMD /usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py
