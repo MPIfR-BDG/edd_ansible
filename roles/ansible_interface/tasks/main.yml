@@ -41,8 +41,8 @@
     detach: yes
     state: started            # ensure that is running
     network_mode: host        # host as need access to network for introspection
-    restart: true
     pull: yes
+    privileged: yes
     restart_policy: always
     volumes:
           - "/var/run/docker.sock:/var/run/docker.sock"

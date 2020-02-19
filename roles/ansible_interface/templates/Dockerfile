@@ -22,6 +22,7 @@ RUN apt-get -y check && \
       net-tools \
       openssh-server \
       python-docker \
+      iproute2 \
       docker.io && \
     mkdir -p ~/.ssh &&\
     cat /tmp/id_rsa.pub > ~/.ssh/authorized_keys && \
