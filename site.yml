@@ -4,9 +4,12 @@ all:
     redis_storage: "{{ groups['dev_server'][0] }}"
     docker_registry: "{{ groups['dev_server'][0] }}"
     docker_registry_port: "5000"
+    ansible_python_interpreter: auto_silent
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
     devices_networking: ""
+    # base path as used for additional data definitions
+    base_path: "{{ playbook_dir }}"
     # The subnet to which the katcp server are listening to for control
     # connections
     edd_subnet: "0.0.0.0"
