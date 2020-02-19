@@ -2,7 +2,7 @@
 - name: create temporary data directory
   tempfile:
     state: directory
-  register: additional_build_files 
+  register: additional_build_files
   tags:
     - build
     - never
