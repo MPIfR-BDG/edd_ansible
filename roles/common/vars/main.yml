@@ -1,0 +1,2 @@
+---
+data_dir: "/media/scratch/{{ container_name }}"
