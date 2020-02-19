@@ -1,0 +1,11 @@
+---
+########################################################################
+# Provision configuration for the run. This defines which edd components are
+# set up.
+- hosts: gpu_server[1]
+  roles:
+    - gated_spectrometer
+
+- hosts: gpu_server[0]
+  roles:
+    - fits_interface
