@@ -142,6 +142,7 @@ RUN   cd /src && \
       libfreetype6-dev \
       python-scipy \
       python-pytest \
+      python-redis \
       python-astropy &&\
       \
     pip install tornado==4.5.3 nvector katpoint && \
@@ -152,8 +153,7 @@ RUN   cd /src && \
     git clone https://gitlab.mpifr-bonn.mpg.de/wchen/Beamforming.git && \
     cd Beamforming && \
     git checkout f6e10a2bd7fd2c224aa04e1ddc9308b48eeddb4d && \
-    python setup.py install &&\
-    pip install redis &&\
+    python setup.py install && \ 
 #    echo "Cleanup source codes ..." &&\
 #    rm -rf /src &&\
     echo 'DONE!'

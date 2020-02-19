@@ -18,11 +18,14 @@ RUN apt-get -y check && \
     # Install dependencies \
     apt-get --no-install-recommends -y install \
       python \
+      acl \
+      net-tools \
       openssh-server \
+      python-docker \
       docker.io && \
     mkdir -p ~/.ssh &&\
     cat /tmp/id_rsa.pub > ~/.ssh/authorized_keys && \
     service ssh start
 
 WORKDIR /root
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-p", "2222"]
