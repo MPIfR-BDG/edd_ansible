@@ -32,3 +32,7 @@
      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
 
 
+- set_fact:
+    master_controller_ip: "{{ ansible_hostname }}"
+- set_fact:
+    master_controller_port: "{{ bind_port }}"
