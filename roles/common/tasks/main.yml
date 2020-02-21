@@ -67,7 +67,7 @@
         name: "{{ container_name }}"
         state: absent
     - set_fact:
-        edd_container:
+        edd_container: '{{ edd_container | dict2items | rejectattr( "key", "equalto", container_name )|list|items2dict }}'
         cacheable: true
   tags:
     - never
