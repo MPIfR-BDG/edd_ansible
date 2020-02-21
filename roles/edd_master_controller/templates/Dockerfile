@@ -18,6 +18,7 @@ RUN git clone https://github.com/MPIfR-BDG/mpikat.git &&\
     && \
   pip install ansible==2.9.5 &&\ 
   git clone https://github.com/MPIfR-BDG/edd_ansible.git &&\
+  mkdir -p /etc/ansible/ &&\
   cp edd_ansible/site.yml /etc/ansible/hosts &&\
   mkdir ~/.ssh
 

@@ -40,6 +40,7 @@
     - docker_registry
     - redis_storage
     - edd_master_controller
+    - effelsberg_scpi_interface
 
 
 ########################################################################

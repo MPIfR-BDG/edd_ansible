@@ -1,0 +1,8 @@
+---
+ - name: Effelsberg SCPI Interface
+   import_role:
+      name: common
+   vars:
+      image_name: edd_scpi_interface
+      container_name: SCPI_INTERFACE
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_scpi_interface.py --host={{ edd_subnet }} --port={{ bind_port }} --master-controller-ip={{ master_controller_ip}} --master-controller-port={{ master_controller_port }} "
