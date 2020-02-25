@@ -34,10 +34,10 @@
       register: used_ports
 
     - set_fact:
-        bind_port: "{{ edd_katcp_ports| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
+        bind_port: "{{ range(edd_katcp_port_range_start, edd_katcp_port_range_stop)| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
       failed_when: bind_port | int == 0
     - debug:
-        msg: " {{ container_name }} katcp listening on port {{ bind_port }}"
+        msg: " {{ container_name }} katcp free port found {{ bind_port }}"
 
     - docker_container:
         name: "{{ container_name }}"

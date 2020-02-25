@@ -18,11 +18,8 @@ all:
     # Port on which to reach the master controller
     #master_controller_port: "1239"
     # ports which can be assigned to katcp servers for products
-    edd_katcp_ports:
-      - 7147
-      - 7148
-      - 7149
-      - 7150
+    edd_katcp_port_range_start: 7147
+    edd_katcp_port_range_stop: 7199
 
     #cache: yes
     #cache_plugin: redis
