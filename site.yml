@@ -21,6 +21,8 @@ all:
     edd_katcp_port_range_start: 7147
     edd_katcp_port_range_stop: 7199
 
+    effelsberg_scpi_port: 5025
+
     #cache: yes
     #cache_plugin: redis
     #cache_timeout: 7200
