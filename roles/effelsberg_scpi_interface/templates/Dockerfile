@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Switch account to root and adding user accounts and password
 USER root
 
-RUN git clone https://github.com/MPIfR-BDG/mpikat.git &&\
+RUN git clone https://github.com/TobiasWinchen/mpikat.git &&\
   cd mpikat && \
   git checkout dev && \
   python setup.py install

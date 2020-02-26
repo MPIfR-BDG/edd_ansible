@@ -26,6 +26,7 @@
       build:
         pull: yes
         path: "{{ build_directory.path }}"
+        nocache: true
       push: yes
 
   - name: remove the temporary directory
