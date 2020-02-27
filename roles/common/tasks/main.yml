@@ -93,15 +93,12 @@
       src: Dockerfile
       dest: "{{ build_directory.path }}/Dockerfile"
 
-
   - name: Copy additional build files
     copy:
-      src: "{{ item }}"
+      remote_src: yes
+      src: "{{ additional_build_files.path }}/"
       dest: "{{ build_directory.path }}/"
-    with_fileglob:
-      - "{{ additional_build_files.path }}/*"
     when: additional_build_files is defined
-
 
   - name: Build and push image
     docker_image:
@@ -120,10 +117,7 @@
       state: absent
     when: build_directory.path is defined
 
-
   run_once: true    # only need to run on one machine
   tags:
     - never         # only run when build tag is specified
     - build
-
-
