@@ -1,0 +1,9 @@
+---
+ - name: Pulsar Pipeline
+   import_role:
+      name: common
+   vars:
+      image_name: edd_pulsar
+      default_container_name: pulsar_pipeline 
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/EddPulsarPipeline.py  --host={{ edd_subnet }} --port={{ bind_port }}"
+
