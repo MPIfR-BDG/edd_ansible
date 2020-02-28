@@ -1,0 +1,92 @@
+{
+    "packetisers":
+    [
+      {
+            "id": "faraday_room_digitizer",
+            "address": ["134.104.73.132", 7147],
+            "sampling_rate": 3200000000.0,
+            "bit_width": 8,
+            "v_destinations": "225.0.0.152+3:7148",
+            "h_destinations": "225.0.0.156+3:7148",
+						"predecimation_factor": 2,
+						"flip_spectrum": true,
+            "noise_diode_frequency":50.0,
+            "interface_addresses": {
+                "0":"10.10.1.62",
+                "1":"10.10.1.63"
+            }
+      }
+
+    ],
+
+    "products":
+    [
+			{
+       "id": "gated_spectrometer",
+        "input_data_streams":
+        {
+            "polarization_0":
+            {
+                "source": "focus_cabin_digitizer:v_polarization",
+                "format": "MPIFR_EDD_Packetizer:1"
+            },
+             "polarization_1":
+            {
+                "source": "focus_cabin_digitizer:h_polarization",
+                "format": "MPIFR_EDD_Packetizer:1"
+            }
+        },
+        "output_data_streams":
+        {
+            "polarization_0_0":
+            {
+                "format": "GatedSpectrometer:1",
+                "ip": "225.0.0.172",
+                "port": "7152"
+            },
+            "polarization_0_1":
+            {
+                "format": "GatedSpectrometer:1",
+                "ip": "225.0.0.173",
+                "port": "7152"
+            },
+             "polarization_1_0":
+            {
+                "format": "GatedSpectrometer:1",
+                "ip": "225.0.0.174",
+                "port": "7152"
+            },
+             "polarization_1_1":
+            {
+                "format": "GatedSpectrometer:1",
+                "ip": "225.0.0.175",
+                "port": "7152"
+            }
+        },
+        "naccumulate": 16384,
+        "fft_length": 262144
+      },
+      {
+       "id": "fits_interface",
+        "input_data_streams":
+        [
+          {
+            "source": "gated_spectrometer:polarization_0_0",
+            "format": "GatedSpectrometer:1"
+          },
+          {
+            "source": "gated_spectrometer:polarization_0_1",
+            "format": "GatedSpectrometer:1"
+          },
+          {
+            "source": "gated_spectrometer:polarization_1_0",
+            "format": "GatedSpectrometer:1"
+          },
+          {
+            "source": "gated_spectrometer:polarization_1_1",
+            "format": "GatedSpectrometer:1"
+          }
+        ]
+      }
+    ]
+}
