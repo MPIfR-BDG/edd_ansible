@@ -27,12 +27,12 @@
         {
             "polarization_0":
             {
-                "source": "focus_cabin_digitizer:v_polarization",
+                "source": "faraday_room_digitizer:v_polarization",
                 "format": "MPIFR_EDD_Packetizer:1"
             },
              "polarization_1":
             {
-                "source": "focus_cabin_digitizer:h_polarization",
+                "source": "faraday_room_digitizer:h_polarization",
                 "format": "MPIFR_EDD_Packetizer:1"
             }
         },
