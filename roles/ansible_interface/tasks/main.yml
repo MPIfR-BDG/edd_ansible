@@ -51,6 +51,7 @@
     pull: yes
     privileged: yes
     auto_remove: yes
+    force_kill: yes # avoid lag between rm and restart
     volumes:
           - "/var/run/docker.sock:/var/run/docker.sock"
 

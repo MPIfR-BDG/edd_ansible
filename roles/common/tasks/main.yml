@@ -47,6 +47,7 @@
         pull: yes
         privileged: yes
         auto_remove: yes
+        force_kill: yes # avoid lag between rm and restart
         runtime: "{{ docker_runtime }}"
         devices:
           "{{ devices_networking }}"
