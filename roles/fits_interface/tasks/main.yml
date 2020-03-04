@@ -5,4 +5,4 @@
    vars:
       image_name: edd_fits_interface
       container_name: fits_interface
-      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/spead2_fi_server.py --host={{ edd_subnet }} --port={{ bind_port }}"
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_fits_interface.py --host={{ edd_subnet }} --port={{ bind_port }}"
