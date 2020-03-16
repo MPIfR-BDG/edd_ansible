@@ -1,0 +1,9 @@
+---
+ - name: VLBI pipeline
+   import_role:
+      name: common
+   vars:
+      image_name: edd_vlbi
+      default_container_name: vlbi_pipeline
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/VLBIPipeline.py --host={{ edd_subnet }} --port={{ bind_port }}"
+
