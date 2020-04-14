@@ -6,8 +6,8 @@
             "address": ["134.104.73.132", 7147],
             "sampling_rate": 3200000000.0,
             "bit_width": 8,
-            "v_destinations": "225.0.0.152+3:7148",
-            "h_destinations": "225.0.0.156+3:7148",
+            "v_destinations": "225.0.1.152+3:7148",
+            "h_destinations": "225.0.1.156+3:7148",
 						"predecimation_factor": 2,
 						"flip_spectrum": true,
             "noise_diode_frequency":50.0,
@@ -41,25 +41,25 @@
             "polarization_0_0":
             {
                 "format": "GatedSpectrometer:1",
-                "ip": "225.0.0.172",
+                "ip": "225.0.1.172",
                 "port": "7152"
             },
             "polarization_0_1":
             {
                 "format": "GatedSpectrometer:1",
-                "ip": "225.0.0.173",
+                "ip": "225.0.1.173",
                 "port": "7152"
             },
              "polarization_1_0":
             {
                 "format": "GatedSpectrometer:1",
-                "ip": "225.0.0.174",
+                "ip": "225.0.1.174",
                 "port": "7152"
             },
              "polarization_1_1":
             {
                 "format": "GatedSpectrometer:1",
-                "ip": "225.0.0.175",
+                "ip": "225.0.1.175",
                 "port": "7152"
             }
         },
