@@ -1,0 +1,26 @@
+---
+- name: Launch InfluxDB storage
+  docker_container:
+    name: "influxdb_storage"
+    image: influxdb
+    env:
+      INFLUXDB_DB: monitor
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+      INFLUXDB_HTTP_AUTH_ENABLED: true
+    detach: yes
+    state: started              # ensure that is running
+    network_mode: bridge        # host as need access to network for introspection
+    exposed_ports:
+      - "8086"
+    ports:
+      "8086:8086"
+    log_driver: json-file
+    log_options:
+      max-size: 10m
+      max-file: 3
+    pull: yes
+    privileged: no
+    auto_remove: yes
+    force_kill: no # avoid lag between rm and restart
+
