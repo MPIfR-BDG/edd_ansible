@@ -1,0 +1,67 @@
+---
+
+- name: Build ansible interface image
+  block:
+  - name: Create build directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: build_directory
+
+  - name: Copy dockerfile from template
+    template:
+      src: Dockerfile
+      dest: "{{ build_directory.path }}/Dockerfile"
+
+  - name: Copy additional build files
+    copy:
+      remote_src: yes
+      src: "{{ additional_build_files.path }}/"
+      dest: "{{ build_directory.path }}/"
+    when: additional_build_files is defined
+
+  - name: build and push
+    docker_image:
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/grafana"
+      source: build
+      force_source: true
+      build:
+        pull: yes
+        path: "{{ build_directory.path }}"
+        nocache: true
+      push: yes
+
+  - name: remove the temporary directory
+    file:
+      path: "{{ build_directory.path }}"
+      state: absent
+    when: build_directory.path is defined
+
+  register: additional_build_files
+  run_once: true    # only need to run on one machine
+  tags:
+    - never         # only run when build tag is specified
+    - build
+
+
+- name: Launch ansible interface
+  docker_container:
+    name: "grafana_monitoring"
+    image: "{{ docker_registry }}:{{ docker_registry_port }}/grafana:latest"
+    detach: yes
+    state: started            # ensure that is running
+    network_mode: bridge      
+    pull: yes
+    privileged: no
+    auto_remove: no
+    force_kill: no            # avoid lag between rm and restart
+    log_driver: json-file
+    log_options:
+      max-size: 10m
+      max-file: 3
+    exposed_ports:
+      - "3000"
+    ports:
+      "3000:3000"
+
+
