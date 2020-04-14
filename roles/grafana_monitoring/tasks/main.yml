@@ -1,6 +1,6 @@
 ---
 
-- name: Build ansible interface image
+- name: Build grafana monitoring image
   block:
   - name: Create build directory
     tempfile:
@@ -44,7 +44,7 @@
     - build
 
 
-- name: Launch ansible interface
+- name: Launch grafana monitoring 
   docker_container:
     name: "grafana_monitoring"
     image: "{{ docker_registry }}:{{ docker_registry_port }}/grafana:latest"
