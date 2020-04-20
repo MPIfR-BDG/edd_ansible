@@ -11,6 +11,9 @@
     - set_fact:
         edd_container: "{{ {} }}"
       when: edd_container is not defined
+    - set_fact:
+        container_env: "{{ {} }}"
+      when: container_env is not defined
   tags:
     - always
 
@@ -47,6 +50,7 @@
         pull: yes
         privileged: yes
         auto_remove: yes
+        env: "{{ container_env }}"
         force_kill: yes # avoid lag between rm and restart
         runtime: "{{ docker_runtime }}"
         devices:
