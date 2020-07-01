@@ -180,7 +180,7 @@ WORKDIR $DSPSR
 RUN sed -i s/-lgsl/-lgsl\ -fopenmp/ /usr/local/bin/psrdada_ldflags && \
     ./bootstrap && \
     echo "dada" > backends.list && \
-    ./configure --prefix=$DSPSR/install --with-cuda-lib-dir=/usr/local/cuda/lib64/ --with-cuda-include-dir=/usr/local/cuda/include/ --x-libraries=/usr/lib/x86_64-linux-gnu CPPFLAGS="-I"$DAL"/install/include -I/usr/include/hdf5/serial -I"$PSRXML"/install/include" LDFLAGS="-L"$DAL"/install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -L"$PSRXML"/install/lib" LIBS="-lpgplot -lcpgplot -lpsrxml -lxml2" CUDA_NVCC_FLAGS="-gencode arch=compute_30,code=sm_52" && \
+    ./configure --prefix=$DSPSR/install --with-cuda-lib-dir=/usr/local/cuda/lib64/ --with-cuda-include-dir=/usr/local/cuda/include/ --x-libraries=/usr/lib/x86_64-linux-gnu CPPFLAGS="-I"$DAL"/install/include -I/usr/include/hdf5/serial -I"$PSRXML"/install/include" LDFLAGS="-L"$DAL"/install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -L"$PSRXML"/install/lib" LIBS="-lpgplot -lcpgplot -lpsrxml -lxml2"  && \
     make -j $(nproc) && \
     make && \
     make install && \
