@@ -33,6 +33,6 @@
 
 
 - set_fact:
-    master_controller_ip: "{{ ansible_hostname }}"
+    master_controller_ip: "{{ ansible_host }}"
 - set_fact:
     master_controller_port: "{{ bind_port }}"
