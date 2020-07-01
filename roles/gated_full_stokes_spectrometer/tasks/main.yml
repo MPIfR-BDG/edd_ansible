@@ -1,0 +1,9 @@
+---
+ - name: Gated Stokes Spectrometer
+   import_role:
+      name: common
+   vars:
+      image_name: edd_gated_stokes
+      default_container_name: gated_stokes_spectrometer
+      container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/GatedFullStokesSpectrometerPipeline.py --host={{ edd_subnet }} --port={{ bind_port }}"
+
