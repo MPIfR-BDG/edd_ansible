@@ -15,7 +15,7 @@
         "6379:6379"
 
   - set_fact:
-      redis_storage_host: "{{ ansible_hostname }}"
+      redis_storage_host: "{{ ansible_host }}"
       cacheable: yes
     when: default_container_name is not defined
     tags:
@@ -25,3 +25,20 @@
     redis:
       command: flush
       flush_mode: all
+
+  - name: Launch redis commander
+    docker_container:
+      name: redis-commander
+      image: rediscommander/redis-commander:latest
+      state: started
+      restart: true
+      restart_policy: always
+      detach: yes
+      keep_volumes: true
+      env:
+        REDIS_HOSTS: "{{ redis_storage_host }}"
+      exposed_ports:
+        - "8081"
+      ports:
+        "8081:8081"
+
