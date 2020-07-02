@@ -145,7 +145,7 @@ RUN   cd /src && \
       python-redis \
       python-astropy &&\
       \
-    pip install tornado==4.5.3 nvector katpoint kiwisolver==1.1.0 && \
+    pip install tornado==4.5.3 ujson==2.0.3 nvector==0.7.4 katpoint==0.9 kiwisolver==1.1.0 && \
     git clone https://github.com/ska-sa/katportalclient.git &&\
     cd katportalclient && \
     python setup.py install && \
