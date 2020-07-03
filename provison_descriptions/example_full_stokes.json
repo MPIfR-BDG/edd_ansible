@@ -20,7 +20,7 @@
     "products":
     [
 			{
-       "id": "gated_spectrometer",
+       "id": "gated_stokes_spectrometer",
         "input_data_streams":
         {
             "polarization_0":
@@ -93,35 +93,35 @@
         "input_data_streams":
         [
           {
-            "source": "gated_spectrometer:Stokes_I_0",
+            "source": "gated_stokes_spectrometer:Stokes_I_0",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_Q_0",
+            "source": "gated_stokes_spectrometer:Stokes_Q_0",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_U_0",
+            "source": "gated_stokes_spectrometer:Stokes_U_0",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_V_0",
+            "source": "gated_stokes_spectrometer:Stokes_V_0",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_I_1",
+            "source": "gated_stokes_spectrometer:Stokes_I_1",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_Q_1",
+            "source": "gated_stokes_spectrometer:Stokes_Q_1",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_U_1",
+            "source": "gated_stokes_spectrometer:Stokes_U_1",
             "format": "GatedSpectrometer:1"
           },
           {
-            "source": "gated_spectrometer:Stokes_V_1",
+            "source": "gated_stokes_spectrometer:Stokes_V_1",
             "format": "GatedSpectrometer:1"
           }
         ]
