@@ -41,6 +41,7 @@
     - redis_storage
     - edd_master_controller
     - effelsberg_scpi_interface
+    - logspout
 
 
 ########################################################################
@@ -50,3 +51,4 @@
   roles:
     - edd_base
     - ansible_interface
+    - logspout

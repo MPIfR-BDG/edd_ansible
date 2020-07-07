@@ -7,6 +7,7 @@ all:
     ansible_python_interpreter: auto_legacy_silent
     docker_registry_data_path: "/media/scratch/docker_registry/"
     docker_runtime: ""
+    log_server: "effgraylog.mpifr-bonn.mpg.de:12201"
     devices_networking: ""
     # base path as used for additional data definitions
     base_path: "{{ playbook_dir }}"
