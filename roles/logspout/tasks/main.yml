@@ -1,0 +1,14 @@
+- name: Launch logspout
+  docker_container:
+    name: "logspout"
+    image: vincit/logspout-gelf
+    detach: yes
+    state: started            # ensure that is running
+    auto_remove: yes
+    force_kill: yes # avoid lag between rm and restart
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    env:
+      BACKLOG: "false"
+      MULTILINE_FLUSH_AFTER: "10"
+    command: "multiline+gelf://{{ log_server }}"
