@@ -47,6 +47,7 @@
     image: "{{ docker_registry }}:{{ docker_registry_port }}/ansibleinterface:latest"
     detach: yes
     state: started            # ensure that is running
+    recreate: yes
     network_mode: host        # host as need access to network for introspection
     pull: yes
     privileged: yes
