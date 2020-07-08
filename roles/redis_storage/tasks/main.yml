@@ -36,7 +36,7 @@
       detach: yes
       keep_volumes: true
       env:
-        REDIS_HOSTS: "{{ redis_storage_host }}"
+        REDIS_HOSTS: "ANSIBLE:{{ redis_storage_host }}:6379:0,PRODUCTS:{{ redis_storage_host }}:1,DATA_STEAMS:{{ redis_storage_host }}:6379:2,EDD_STATIC:{{ redis_storage_host }}:6379:3,TELESCOPE_META:{{ redis_storage_host }}:6379:4 "
       exposed_ports:
         - "8081"
       ports:
