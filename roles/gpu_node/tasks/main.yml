@@ -1,0 +1,29 @@
+# inspired by https://github.com/idiv-biodiversity/ansible-role-nvidia-driver/blob/master/tasks/nvidia-driver.yml
+---
+
+  - name: check if nvidia driver is installed
+    shell: |
+      set -o pipefail
+      nvidia-modprobe --version |
+      grep -oP 'version \K[[:digit:]]+\.[[:digit:]]+'
+    register: nvidia_driver_installed_version
+    check_mode: no
+    changed_when: >-
+      nvidia_driver_installed_version.stdout != driver_version
+    failed_when: no
+
+  - name: check if nvidia driver kernel module exists for current kernel
+    stat:
+      path: '/lib/modules/{{ ansible_kernel }}/kernel/drivers/video/nvidia.ko'
+    register: nvidia_driver_kernel_module
+    check_mode: no
+    changed_when: >-
+      not nvidia_driver_kernel_module.stat.exists
+    failed_when: no
+
+  - name: include actual installation
+    include_tasks: install.yml
+    when: >
+      nvidia_driver_installed_version.changed or
+      nvidia_driver_kernel_module.changed
+

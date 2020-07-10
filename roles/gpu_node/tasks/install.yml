@@ -1,0 +1,19 @@
+---
+    - get_url:
+        url: "{{ driver_url }}"
+        dest: /tmp
+        mode: +x
+    - service:
+        name: docker
+        state: stopped
+    - modprobe:
+        name: "{{ item }}"
+        state: absent
+        with_items:
+          - nvidia_drm
+          - nvidia_modeset
+          - nvidia
+    - command: "/tmp/{{ installer_file }} -a -s"
+    - service:
+        name: docker
+        state: started
