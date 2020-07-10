@@ -39,9 +39,11 @@
   roles:
     - docker_registry
     - redis_storage
+    - dhcp
     - edd_master_controller
     - effelsberg_scpi_interface
     - logspout
+
 
 
 ########################################################################
