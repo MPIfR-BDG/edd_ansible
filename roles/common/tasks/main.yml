@@ -66,6 +66,12 @@
         edd_container: "{{ edd_container | combine( { container_name: {'port': bind_port, 'output_dir': data_dir} } )}}"
         cacheable: true
 
+    - docker_container_info:
+        name: "{{ container_name }}"
+      register: result
+      failed_when: not result.exists or not result['container']['State']['Running']
+
+
 - name: Stop EDD docker container "{{ image_name }}"
   block:
     - docker_container:
