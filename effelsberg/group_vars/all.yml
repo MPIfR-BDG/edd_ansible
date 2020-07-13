@@ -12,6 +12,9 @@
   # The subnet to which the katcp server are listening to for control
   # connections
   edd_subnet: "0.0.0.0"
+
+  high_speed_data_subnet: "10.10.1.0"
+  high_speed_data_subnet_dhcp_block_start: "10.10.1.61" # First IP of the subnet used for static dhcpd
   # port for master controller ansible ssh conenctions
   edd_ansible_port: 2222
   # Port on which to reach the master controller
@@ -28,4 +31,11 @@
   #cache_plugin: redis
   #cache_timeout: 7200
   #cache_connection: edd01:6379:0
+
+  ## dict if devices / macs that are asigned a static ip via dhcpd. 
+  dhcp_devices:
+    skarab_00:
+      macs:
+        - 06:50:02:09:2a:01
+        - 06:50:02:09:2a:02
 
