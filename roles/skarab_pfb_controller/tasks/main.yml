@@ -1,0 +1,9 @@
+---
+- name: Skarab PFB Controller
+  import_role:
+     name: common
+  vars:
+     image_name: skarab_pfb_controller
+     default_container_name: skarab_pfb_controller
+     container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/pipeline/SkarabPipeline.py --host={{ edd_subnet }} --port={{ bind_port }} --device={{ npc_devices[device]['interfaces'][0].ip }} --device_port={{ npc_devices[device].control_port}}"
+

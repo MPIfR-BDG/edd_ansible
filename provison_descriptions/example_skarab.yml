@@ -1,0 +1,15 @@
+########################################################################
+# Provision configuration for the run. This defines which edd components are
+# set up.
+#- hosts: gpu_server[1]
+#  roles:
+#    - gated_full_stokes_spectrometer
+#
+- hosts: gpu_server[0]
+  vars:
+    bind_port: 1234
+  roles:
+  #  - fits_interface
+    - role: skarab_pfb_controller
+      device: skarab_00
+
