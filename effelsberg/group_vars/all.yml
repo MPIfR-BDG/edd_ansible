@@ -1,0 +1,31 @@
+---
+  redis_storage: "{{ groups['dev_server'][0] }}"
+  docker_registry: "{{ groups['dev_server'][0] }}"
+  docker_registry_port: "5000"
+  ansible_python_interpreter: auto_legacy_silent
+  docker_registry_data_path: "/media/scratch/docker_registry/"
+  docker_runtime: ""
+  log_server: "effgraylog.mpifr-bonn.mpg.de:12202"
+  devices_networking: ""
+  # base path as used for additional data definitions
+  base_path: "{{ playbook_dir }}"
+  # The subnet to which the katcp server are listening to for control
+  # connections
+  edd_subnet: "0.0.0.0"
+  # port for master controller ansible ssh conenctions
+  edd_ansible_port: 2222
+  # Port on which to reach the master controller
+  #master_controller_port: "1239"
+  # ports which can be assigned to katcp servers for products
+  edd_katcp_port_range_start: 7147
+  edd_katcp_port_range_stop: 7199
+
+  edd_inventory_folder: "effelsberg"
+
+  effelsberg_scpi_port: 5025
+
+  #cache: yes
+  #cache_plugin: redis
+  #cache_timeout: 7200
+  #cache_connection: edd01:6379:0
+

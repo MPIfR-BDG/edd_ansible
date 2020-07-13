@@ -25,9 +25,9 @@ are roles assigned to individual hosts.
 
 ### Inventories
 All hosts + global variables for the site are collected in the
-inventory file `site.yml` . You can ping
+inventory directory, e.g. effelsberg. You can ping
 them via the command:
- `$ ansible -i site.yml -m ping all`
+ `$ ansible -i effelsberg -m ping all`
 .
 
 
@@ -45,7 +45,7 @@ Every configuration is a play. The `example_run.yml` assignees the role
 gated_spectrometer to the first gpu node and executes test roles (a simple
 ping) on the next.  The play is executed by:
 
-`$ansible-playbook -i site.yml example_run.yml`
+`$ansible-playbook -i effelsberg example_run.yml`
 
 
 ## Ansible for EDD provisioning
@@ -59,12 +59,12 @@ The core EDD consists of
 The basic_configuration.yml playbook will ensure the core system is up and
 running. Use
 `
-$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml
+$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i effelsberg basic_configuration.yml
 `
 to execute the playbook, respectively **also** use
 
 `
-$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i site.yml basic_configuration.yml --tags=build
+$ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i effelsberg basic_configuration.yml --tags=build
 `
 to build the containers. This is a force build to always pull latest changes
 from the repositoreis. The basic configuration playbook will *create* the
@@ -77,15 +77,15 @@ will be withdrawn.**
 ### EDD provisioning
 To provison EDD based pipelines, a play needs to be loaded
 `
-$ansible-playbook -i site.yml provision_descriptions/example_playbook.yml
+$ansible-playbook -i effelsberg provision_descriptions/example_playbook.yml
 `
 Potentially, the required containers need **also** to be build before loading the play:
 `
-$ansible-playbook -i site.yml provision_descriptions/example_playbook.yml --tags=build
+$ansible-playbook -i effelsberg provision_descriptions/example_playbook.yml --tags=build
 `
 To stop the containers launched use:
 `
-$ansible-playbook -i site.yml example_run.yml --tags stop
+$ansible-playbook -i effelsberg example_run.yml --tags stop
 ``
 
 The master controller may also provision the edd. The master controller

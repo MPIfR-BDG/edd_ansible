@@ -1,0 +1,10 @@
+---
+all:
+  children:
+    dev_server:
+      hosts:
+        edd01
+
+    gpu_server:
+      hosts:
+        edd[00:01]
