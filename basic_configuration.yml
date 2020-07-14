@@ -3,9 +3,8 @@
 # registry.
 
 ########################################################################
-- name: Additional bare metal configuration 
+- name: Additional bare metal configuration --  all node
   hosts: all
-  gather_facts: no
   vars:
     ansible_ssh_user: root
   tasks:
@@ -20,10 +19,16 @@
         dest: "/etc/docker/certs.d/{{ docker_registry }}:{{ docker_registry_port }}/registry.crt"
 
 
+- name: Additional bare metal configuration -- GPU Nodes
+  hosts: gpu_server
+  vars:
+    ansible_ssh_user: root
+  roles:
+    - gpu_node
+
 ########################################################################
 - name: Generate local security relevant data
   hosts: localhost
-  gather_facts: no
   connection: local
   tasks:
     - name: generate ssh keys for ansible interface
@@ -36,6 +41,7 @@
 ########################################################################
 - name: setup control server
   hosts: dev_server
+  gather_facts: no
   roles:
     - docker_registry
     - redis_storage
@@ -48,7 +54,7 @@
 
 ########################################################################
 - name: setup worker nodes
-  hosts: all
+  hosts: gpu_server 
   gather_facts: no
   roles:
     - edd_base

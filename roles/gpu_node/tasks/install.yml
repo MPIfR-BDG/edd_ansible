@@ -9,10 +9,11 @@
     - modprobe:
         name: "{{ item }}"
         state: absent
-        with_items:
-          - nvidia_drm
-          - nvidia_modeset
-          - nvidia
+      with_items:
+        - nvidia_drm
+        - nvidia_modeset
+        - nvidia_uvm
+        - nvidia
     - command: "/tmp/{{ installer_file }} -a -s"
     - command: "nvidia-persistenced"
     - service:
