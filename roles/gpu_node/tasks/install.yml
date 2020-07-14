@@ -14,6 +14,7 @@
           - nvidia_modeset
           - nvidia
     - command: "/tmp/{{ installer_file }} -a -s"
+    - command: "nvidia-persistenced"
     - service:
         name: docker
         state: started
