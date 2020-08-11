@@ -58,3 +58,12 @@
     restart: true
     pull: yes
 
+
+- name: Stop dhcpd
+  block:
+    - docker_container:
+        name: "edd_dhcpd"
+        state: absent
+  tags:
+    - never
+    - stop

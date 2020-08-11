@@ -12,3 +12,15 @@
       BACKLOG: "false"
       MULTILINE_FLUSH_AFTER: "10"
     command: "multiline+gelf://{{ log_server }}"
+
+
+- name: Stop logspout
+  block:
+    - docker_container:
+        name: "logspout"
+        state: absent
+  tags:
+    - never
+    - stop
+
+

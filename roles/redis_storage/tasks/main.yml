@@ -26,6 +26,15 @@
       command: flush
       flush_mode: all
 
+  - name: Stop redis db
+    docker_container:
+          name: edd_redis
+          state: absent
+    tags:
+      - never
+      - stop
+
+
   - name: Launch redis commander
     docker_container:
       name: redis-commander
@@ -42,3 +51,10 @@
       ports:
         "8081:8081"
 
+  - name: Stop redis commander
+    docker_container:
+        name: redis-commander
+        state: absent
+    tags:
+      - never
+      - stop

@@ -54,7 +54,7 @@
 
 ########################################################################
 - name: setup worker nodes
-  hosts: gpu_server 
+  hosts: gpu_server
   gather_facts: no
   roles:
     - edd_base
