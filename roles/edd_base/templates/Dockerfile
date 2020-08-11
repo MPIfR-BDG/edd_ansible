@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.2-devel-ubuntu18.04
+FROM nvidia/cuda:11.0-devel-ubuntu18.04
 
 MAINTAINER Tobias Winchen "twinchen@mpifr-bonn.mpg.de"
 
@@ -17,8 +17,9 @@ RUN mkdir /src && \
     apt-get install -y apt-utils apt-transport-https software-properties-common locales && \
     apt-get -y update --fix-missing && \
     apt-get -y upgrade && \
-    echo en_US.UTF-8 > /etc/locale.gen && \
+    echo en_US.UTF-8 UTF-8 > /etc/locale.gen && \
     echo LANG=en_US.UTF-8 > /etc/default/locale && \
+    locale-gen  && \
     # Install dependencies \
     apt-get --no-install-recommends -y install \
       build-essential \
@@ -59,7 +60,7 @@ RUN mkdir /src && \
     wget http://content.mellanox.com/ofed/MLNX_OFED-4.7-1.0.0.1/MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64.tgz &&\ 
     tar -xzvf MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64.tgz &&\ 
     MLNX_OFED_LINUX-4.7-1.0.0.1-ubuntu18.04-x86_64/mlnxofedinstall --user-space-only --without-fw-update --all -q && \
-    rm -rf /MLNX_OFED_LINUX* &&\
+    rm -rf /src/MLNX_OFED_LINUX* &&\
     # boost all dev conflicts with MEllanox stuff thus install only here\
     apt-get --no-install-recommends -y install libboost-all-dev
 
