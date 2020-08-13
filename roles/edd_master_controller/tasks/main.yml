@@ -1,31 +1,39 @@
 ---
-- name: create temporary data directory
+- name: Create temporary data directory
   tempfile:
     state: directory
   register: additional_build_files
-  tags:
-    - build
-    - never
+  check_mode: false
 
-- name: copy ssh key
+- name: Copy ssh key
   copy:
     src: "{{ base_path }}/data/id_rsa"
     dest: "{{ additional_build_files.path }}/id_rsa"
-  tags:
-    - build
-    - never
 
 - name: copy ansible.cfg
   template:
     src: ansible.cfg
     dest: "{{ additional_build_files.path }}/ansible.cfg"
-  tags:
-    - build
-    - never
 
-- name: Master Controller
+- name: Build master controller container
+  include_role:
+    name: common
+    tasks_from: build_tasks.yml
+  vars:
+     image_name: edd_master_controller
+     container_name: MASTER_CONTROLLER
+     container_cmd: "/usr/bin/python /usr/local/lib/python2.7/dist-packages/mpikat-0.1-py2.7.egg/mpikat/effelsberg/edd/edd_master_controller.py --host={{ edd_subnet }} --port={{ bind_port }} --redis-ip {{ redis_storage }}"
+
+- name: Remove the temporary data directory
+  file:
+    path: "{{ additional_build_files.path }}"
+    state: absent
+  when: additional_build_files.path is defined
+  check_mode: false
+
+- name: master controller container
   import_role:
-     name: common
+    name: common
   vars:
      image_name: edd_master_controller
      container_name: MASTER_CONTROLLER

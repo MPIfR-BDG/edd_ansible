@@ -1,0 +1,56 @@
+---
+- debug:
+    msg: Launch EDD docker container "{{ image_name }}"
+- file:
+    path: "{{ data_dir }}"
+    state: directory
+    mode: '0777'
+- acl:
+    path: "{{ data_dir }}"
+    default: yes
+    recursive: yes
+    etype: mask
+    permissions: rwx
+    state: present
+- shell: netstat -nlt4 | grep -oP '(?<=0.0.0.0:)(\d+)'
+  register: used_ports
+
+- set_fact:
+    bind_port: "{{ range(edd_katcp_port_range_start, edd_katcp_port_range_stop)| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
+  failed_when: bind_port | int == 0
+- debug:
+    msg: " {{ container_name }} katcp free port found {{ bind_port }}"
+
+- docker_container:
+    name: "{{ container_name }}"
+    image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
+    command: "{{ container_cmd }}"
+    state: started            # ensure that is running
+    pull: yes
+    privileged: yes
+    auto_remove: yes
+    env: "{{ container_env }}"
+    force_kill: yes # avoid lag between rm and restart
+    runtime: "{{ docker_runtime }}"
+    devices:
+      "{{ devices_networking }}"
+    network_mode: host
+    capabilities:
+      - "IPC_LOCK"
+    volumes:
+      - "{{ data_dir }}:/mnt:rw"
+    detach: yes
+  retries: 3      # If container launch fails, mostly due to delay in reoval of old container, retry after delay
+  delay: 5
+
+- set_fact:
+    edd_container: "{{ edd_container | combine( { container_name: {'port': bind_port, 'output_dir': data_dir} } )}}"
+    cacheable: true
+
+- docker_container_info:
+    name: "{{ container_name }}"
+  register: result
+  failed_when: not result.exists or not result['container']['State']['Running']
+
+
+

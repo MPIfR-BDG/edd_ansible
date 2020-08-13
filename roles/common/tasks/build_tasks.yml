@@ -1,0 +1,45 @@
+---
+- name: "Remove old image: {{ image_name }}"
+  docker_image:
+    name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
+    state: absent
+    force_absent: yes
+
+- name: Create build directory
+  tempfile:
+    state: directory
+    suffix: temp
+  register: build_directory
+  check_mode: false
+
+- name: Copy dockerfile from template
+  template:
+    src: Dockerfile
+    dest: "{{ build_directory.path }}/Dockerfile"
+
+- name: Copy additional build files
+  copy:
+    remote_src: yes
+    src: "{{ additional_build_files.path }}/"
+    dest: "{{ build_directory.path }}/"
+  when: additional_build_files is defined
+
+- name: "Build and push image: {{ image_name }}"
+  docker_image:
+    name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
+    source: build
+    force_source: true
+    build:
+      path: "{{ build_directory.path }}"
+      pull: yes
+      nocache: true
+    push: yes
+
+- name: Remove the temporary directory
+  file:
+    path: "{{ build_directory.path }}"
+    state: absent
+  when: build_directory.path is defined
+  check_mode: false
+
+

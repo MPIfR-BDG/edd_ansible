@@ -17,109 +17,16 @@
     - always
 
 
-- name: Build docker image "{{ image_name }}"
-  block:
-  - name: Remove old image
-    docker_image:
-      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
-      state: absent
-      force_absent: yes
-
-  - name: Create build directory
-    tempfile:
-      state: directory
-      suffix: temp
-    register: build_directory
-
-  - name: Copy dockerfile from template
-    template:
-      src: Dockerfile
-      dest: "{{ build_directory.path }}/Dockerfile"
-
-  - name: Copy additional build files
-    copy:
-      remote_src: yes
-      src: "{{ additional_build_files.path }}/"
-      dest: "{{ build_directory.path }}/"
-    when: additional_build_files is defined
-
-  - name: Build and push image
-    docker_image:
-      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
-      source: build
-      force_source: true
-      build:
-        path: "{{ build_directory.path }}"
-        pull: yes
-        nocache: true
-      push: yes
-
-  - name: Remove the temporary directory
-    file:
-      path: "{{ build_directory.path }}"
-      state: absent
-    when: build_directory.path is defined
-
+- name: Build image  "{{ image_name }}"
+  include_tasks: build_tasks.yml
   run_once: true    # only need to run on one machine
   tags:
     - never         # only run when build tag is specified
     - build
 
-
 - name: Launch EDD docker container "{{ image_name }}"
-  block:
-    - debug:
-        msg: Launch EDD docker container "{{ image_name }}"
-    - file:
-        path: "{{ data_dir }}"
-        state: directory
-        mode: '0777'
-    - acl:
-        path: "{{ data_dir }}"
-        default: yes
-        recursive: yes
-        etype: mask
-        permissions: rwx
-        state: present
-    - shell: netstat -nlt4 | grep -oP '(?<=0.0.0.0:)(\d+)'
-      register: used_ports
+  include_tasks: launch_tasks.yml
 
-    - set_fact:
-        bind_port: "{{ range(edd_katcp_port_range_start, edd_katcp_port_range_stop)| difference(used_ports.stdout_lines | map('int') | list) | first | default(0) }}"
-      failed_when: bind_port | int == 0
-    - debug:
-        msg: " {{ container_name }} katcp free port found {{ bind_port }}"
-
-    - docker_container:
-        name: "{{ container_name }}"
-        image: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}:latest"
-        command: "{{ container_cmd }}"
-        state: started            # ensure that is running
-        pull: yes
-        privileged: yes
-        auto_remove: yes
-        env: "{{ container_env }}"
-        force_kill: yes # avoid lag between rm and restart
-        runtime: "{{ docker_runtime }}"
-        devices:
-          "{{ devices_networking }}"
-        network_mode: host
-        capabilities:
-          - "IPC_LOCK"
-        volumes:
-          - "{{ data_dir }}:/mnt:rw"
-        detach: yes
-      retries: 3      # If container launch fails, mostly due to delay in reoval of old container, retry after delay
-      delay: 5
-
-    - set_fact:
-        edd_container: "{{ edd_container | combine( { container_name: {'port': bind_port, 'output_dir': data_dir} } )}}"
-        cacheable: true
-
-    - docker_container_info:
-        name: "{{ container_name }}"
-      register: result
-      failed_when: not result.exists or not result['container']['State']['Running']
 
 
 - name: Stop EDD docker container "{{ image_name }}"

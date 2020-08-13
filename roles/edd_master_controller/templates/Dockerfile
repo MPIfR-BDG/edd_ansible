@@ -19,7 +19,7 @@ RUN git clone https://github.com/MPIfR-BDG/mpikat.git &&\
   pip install ansible==2.9.5 &&\ 
   git clone https://github.com/MPIfR-BDG/edd_ansible.git &&\
   mkdir -p /etc/ansible/ &&\
-  cp edd_ansible/{{edd_inventory_folder}}/hosts /etc/ansible/hosts &&\
+  cp -r edd_ansible/{{edd_inventory_folder}}/* /etc/ansible/ &&\
   mkdir ~/.ssh
 
 COPY ansible.cfg /etc/ansible/ansible.cfg
