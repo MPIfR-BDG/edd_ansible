@@ -1,5 +1,4 @@
 ---
-
 - name: Check for custom vs default container names
   block:
     - set_fact:
@@ -16,6 +15,55 @@
       when: container_env is not defined
   tags:
     - always
+
+
+- name: Build docker image "{{ image_name }}"
+  block:
+  - name: Remove old image
+    docker_image:
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
+      state: absent
+      force_absent: yes
+
+  - name: Create build directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: build_directory
+
+  - name: Copy dockerfile from template
+    template:
+      src: Dockerfile
+      dest: "{{ build_directory.path }}/Dockerfile"
+
+  - name: Copy additional build files
+    copy:
+      remote_src: yes
+      src: "{{ additional_build_files.path }}/"
+      dest: "{{ build_directory.path }}/"
+    when: additional_build_files is defined
+
+  - name: Build and push image
+    docker_image:
+      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
+      source: build
+      force_source: true
+      build:
+        path: "{{ build_directory.path }}"
+        pull: yes
+        nocache: true
+      push: yes
+
+  - name: Remove the temporary directory
+    file:
+      path: "{{ build_directory.path }}"
+      state: absent
+    when: build_directory.path is defined
+
+  run_once: true    # only need to run on one machine
+  tags:
+    - never         # only run when build tag is specified
+    - build
 
 
 - name: Launch EDD docker container "{{ image_name }}"
@@ -61,6 +109,8 @@
         volumes:
           - "{{ data_dir }}:/mnt:rw"
         detach: yes
+      retries: 3      # If container launch fails, mostly due to delay in reoval of old container, retry after delay
+      delay: 5
 
     - set_fact:
         edd_container: "{{ edd_container | combine( { container_name: {'port': bind_port, 'output_dir': data_dir} } )}}"
@@ -83,52 +133,3 @@
   tags:
     - never
     - stop
-
-
-- name: Build docker image "{{ image_name }}"
-  block:
-  - name: Remove image
-    docker_image:
-      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
-      state: absent
-      force_absent: yes
-
-  - name: Create build directory
-    tempfile:
-      state: directory
-      suffix: temp
-    register: build_directory
-
-  - name: Copy dockerfile from template
-    template:
-      src: Dockerfile
-      dest: "{{ build_directory.path }}/Dockerfile"
-
-  - name: Copy additional build files
-    copy:
-      remote_src: yes
-      src: "{{ additional_build_files.path }}/"
-      dest: "{{ build_directory.path }}/"
-    when: additional_build_files is defined
-
-  - name: Build and push image
-    docker_image:
-      name: "{{ docker_registry }}:{{ docker_registry_port }}/{{ image_name }}"
-      source: build
-      force_source: true
-      build:
-        path: "{{ build_directory.path }}"
-        pull: yes
-        nocache: true
-      push: yes
-
-  - name: remove the temporary directory
-    file:
-      path: "{{ build_directory.path }}"
-      state: absent
-    when: build_directory.path is defined
-
-  run_once: true    # only need to run on one machine
-  tags:
-    - never         # only run when build tag is specified
-    - build
