@@ -30,6 +30,7 @@
 - name: Generate local security relevant data
   hosts: localhost
   connection: local
+  gather_facts: no
   tasks:
     - name: generate ssh keys for ansible interface
       openssh_keypair:
@@ -45,7 +46,7 @@
   roles:
     - docker_registry
     - redis_storage
-    - dhcp
+      #    - dhcp
     - edd_master_controller
     - effelsberg_scpi_interface
     - logspout
