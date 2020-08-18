@@ -24,9 +24,9 @@ are roles assigned to individual hosts.
 
 
 ### Inventories
-All hosts + global variables for the site are collected in the
-inventory directory, e.g. effelsberg. You can ping
-them via the command:
+All hosts + global variables for the individual sites are collected in the
+corresponding inventory directory, e.g. effelsberg. You can e.g. ping all hosts
+via the command:
  `$ ansible -i effelsberg -m ping all`
 .
 
@@ -51,18 +51,24 @@ ping) on the next.  The play is executed by:
 ## Ansible for EDD provisioning
 ### EDD Core
 The core EDD consists of
-  * A master controller
-  * A redis DB
-  * A docker registry
-  * A ansibleinterface container running on every node of the system
+  * a master controller,
+  * a redis DB,
+  * a docker registry,
+	* a dhcp server,
+  * a ansibleinterface container running on every node of the system used to
+		grant ansible access to the node to the amster controller.
 
 The basic_configuration.yml playbook will ensure the core system is up and
-running. Use
+running. It will also ensure certain configurations on the bare metal systems,
+e.g.
+	* Installing the correct certificates for the docker registry
+	* Installing the correct version of the nvidia driver
+
+Use
 `
 $ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i effelsberg basic_configuration.yml
 `
 to execute the playbook, respectively **also** use
-
 `
 $ANSIBLE_CACHE_PLUGIN=memory ansible-playbook -i effelsberg basic_configuration.yml --tags=build
 `
